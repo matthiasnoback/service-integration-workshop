@@ -13,8 +13,8 @@ rabbitmq:
     plugins: [rabbitmq_management]
 php:
     install: '1'
-    ppa: php5-5.6
-    packages: [php5-cli, php5-intl, php5-mcrypt, php5-xdebug]
+    ppa: php
+    packages: [php7.0-cli, php7.0-intl, php7.0-xdebug, php7.0-dom, php7.0-mbstring, php7.0-bcmath, php7.0-phar]
 xdebug:
     install: '1'
 composer:
