@@ -37,7 +37,7 @@ final class ConsoleApplicationConfig extends DefaultApplicationConfig
             ->beginCommand('consume')
             ->setHandler([$this->serviceContainer, 'consumeMessageCommandHandler'])
             ->addOption('queue', 'u', Option::REQUIRED_VALUE | Option::STRING,
-                'The queue to consume messages from', 'all_messages')
+                'The queue to consume messages from (a random name by default)', '')
             ->addOption('exchange', 'e', Option::REQUIRED_VALUE | Option::STRING,
                 'The exchange to bind the queue to', 'messages')
             ->addOption('binding', 'b', Option::REQUIRED_VALUE | Option::STRING,

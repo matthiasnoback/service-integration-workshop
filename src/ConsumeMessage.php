@@ -29,7 +29,7 @@ final class ConsumeMessage
             false // no auto-delete: when no queues are bound to this exchanges, it will not be auto-deleted
         );
 
-        $io->writeLine(sprintf('Declare queue <c2>%s</c2>', $queue));
+        $io->writeLine(sprintf('Declare queue', $queue));
         list($queue) = $this->channel->queue_declare(
             $queue,
             false, // not passive; check if queue declarations are compatible
@@ -37,6 +37,7 @@ final class ConsumeMessage
             false, // not exclusive; can be shared between connections
             true // auto-delete: when all consumers have finished using it, the queue gets deleted
         );
+        $io->writeLine(sprintf('Queue name <c2>%s</c2>', $queue));
 
         $io->writeLine(sprintf('Bind queue to exchange with binding <c2>%s</c2>', $binding));
         $this->channel->queue_bind($queue, $exchange, $binding);
@@ -44,6 +45,7 @@ final class ConsumeMessage
         $callback = function (AMQPMessage $amqpMessage) use ($io) {
             $io->writeLine(sprintf('Received: "%s"', $amqpMessage->body));
 
+            // count the number of points n in the body and sleep for n seconds...
             sleep(substr_count($amqpMessage->body, '.'));
 
             $io->writeLine('<success>Done</success>');
