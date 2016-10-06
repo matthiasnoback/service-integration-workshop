@@ -1,0 +1,9 @@
+#!/usr/bin/env php
+<?php
+
+use Webmozart\Console\ConsoleApplication;
+
+require __DIR__ . '/vendor/autoload.php';
+
+$cli = new ConsoleApplication(new ConsoleApplicationConfig(new ServiceContainer()));
+$cli->run();
