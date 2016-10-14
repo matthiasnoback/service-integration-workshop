@@ -6,6 +6,7 @@ Afterwards, run:
 
     vagrant ssh
     cd /vagrant
+    composer install
     vendor/bin/phpunit
 
 You should see a green bar, indicating that the tests pass.
