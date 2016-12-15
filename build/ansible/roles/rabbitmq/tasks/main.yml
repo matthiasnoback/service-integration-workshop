@@ -3,7 +3,7 @@
   apt_repository: repo='deb http://www.rabbitmq.com/debian/ testing main' state=present
 
 - name: add the verification key for the package
-  sudo: yes
+  become: yes
   shell: curl http://www.rabbitmq.com/rabbitmq-signing-key-public.asc | sudo apt-key add -
 
 - name: update repositories
@@ -14,8 +14,8 @@
 
 - name: enable rabbitmq plugins
   rabbitmq_plugin: names={{ item }} state=enabled
-  with_items: rabbitmq.plugins
-  when: rabbitmq.plugins is defined
+  with_items:
+    - rabbitmq_management
 
 - name: add user
   rabbitmq_user: user={{ rabbitmq.user }} password={{ rabbitmq.password }} node=rabbit@{{ vagrant_local.vm.hostname }} tags=administrator,{{ rabbitmq.user }} vhost=/ configure_priv=.* write_priv=.* read_priv=.* state=present

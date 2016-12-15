@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  sudo: true
+  become: true
   vars_files:
     - vars/all.yml
   roles:
@@ -8,6 +8,4 @@
     - vagrant_local
     - rabbitmq
     - php
-    - xdebug
-    - composer
     - app

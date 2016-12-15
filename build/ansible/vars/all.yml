@@ -1,0 +1,9 @@
+---
+server:
+    timezone: UTC
+    locale: en_US.UTF-8
+vagrant_local:
+    vm: { hostname: default }
+rabbitmq:
+    user: user
+    password: password
