@@ -1,0 +1,4 @@
+- Make an HTTP call from conference_web to orders_and_registrations instead of sending a message.
+- Extract a new service/context which is about the physical aspects of conference hosting (rooms, seats).
+- Add a caching layer for conference management.
+- Introduce a ConferenceUpdated event and listen to it to start creating a data store for use by the ConferenceWeb form.

@@ -1,14 +1,26 @@
 # Getting started
 
-Clone this project and run `vagrant up` in the root directory. This will set up a virtual machine, with PHP and RabbitMQ.
+Clone this project. Make sure you have `docker` and `docker-compose` installed on your host machine.
 
-Afterwards, run:
+Define the following environment variables:
 
-    vagrant ssh
-    cd /vagrant
-    composer install
-    vendor/bin/phpunit
+    # if not defined yet
+    export COMPOSER_HOME=$HOME/.composer
+    export HOST_UID=$(id -u)
+    export HOST_GID=$(id -g)
 
-You should see a green bar, indicating that the tests pass.
+Find out the IP address of your host machine, e.g. by running `ifconfig`, then export the host IP like this:
 
-Go to [http://192.168.33.99:15672](http://192.168.33.99:15672/) in a browser, and log in with username "user" and password "password". This will lead you to the RabbitMQ Management UI.
+    export DOCKER_HOST_IP=192.168.1.47
+
+Then run:
+
+    docker-compose pull
+
+When the Docker images have been pulled, you can run:
+
+    docker-compose up -d
+
+Now go to [localhost:15672](http://localhost:15672/) in a browser. This will lead you to the RabbitMQ Management UI. You can log in with username "user" and password "password".
+
+The website can be reached at [localhost/?c=order](http://localhost/?c=order).
