@@ -29,3 +29,8 @@ Then you can finally run:
 Now go to [localhost:15672](http://localhost:15672/) in a browser. This will lead you to the RabbitMQ Management UI. You can log in with username "user" and password "password".
 
 The website can be reached at [localhost](http://localhost).
+
+# Tips
+
+- Use [`docker-compose logs`](https://docs.docker.com/compose/reference/logs/) to find out what's going on in the containers.
+- Run `./composer.sh require ...` to install additional packages.
