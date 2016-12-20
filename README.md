@@ -23,4 +23,4 @@ When the Docker images have been pulled, you can run:
 
 Now go to [localhost:15672](http://localhost:15672/) in a browser. This will lead you to the RabbitMQ Management UI. You can log in with username "user" and password "password".
 
-The website can be reached at [localhost/?c=order](http://localhost/?c=order).
+The website can be reached at [localhost](http://localhost).
