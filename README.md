@@ -17,7 +17,12 @@ Then run:
 
     docker-compose pull
 
-When the Docker images have been pulled, you can run:
+When the Docker images have been pulled, you should first install project dependencies using Composer:
+
+    ./composer.sh install
+
+Then you can finally run:
+
 
     docker-compose up -d
 
