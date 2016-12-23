@@ -3,7 +3,6 @@
   "type": "project",
   "require": {
     "php-amqplib/php-amqplib": "^2.6",
-    "webmozart/console": "^1.0@beta",
     "ramsey/uuid": "^3.5"
   },
   "require-dev": {

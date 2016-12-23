@@ -29,6 +29,7 @@ services:
         environment:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
             PHP_IDE_CONFIG: "serverName=conference_web"
+            SERVICE_NAME: conference_web
         restart: "on-failure:5"
     conference_management:
         build:
@@ -40,6 +41,7 @@ services:
         environment:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
             PHP_IDE_CONFIG: "serverName=conference_management"
+            SERVICE_NAME: conference_management
         restart: "on-failure:5"
     orders_and_registrations:
         build:
@@ -53,6 +55,7 @@ services:
         environment:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
             PHP_IDE_CONFIG: "serverName=conference_management"
+            SERVICE_NAME: orders_and_registrations
         restart: "on-failure:5"
     orders_and_registrations_web:
         build:
@@ -66,6 +69,7 @@ services:
         environment:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
             PHP_IDE_CONFIG: "serverName=orders_and_registrations_web"
+            SERVICE_NAME: orders_and_registrations
         restart: "on-failure:5"
     devtools:
         image: ibuildingsnl/rabbitmq_workshop_devtools

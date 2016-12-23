@@ -6,6 +6,7 @@ use Ramsey\Uuid\Uuid;
 use function Shared\CommandLine\line;
 use function Shared\CommandLine\make_green;
 use function Shared\CommandLine\stdout;
+use Shared\Persistence\DB;
 use Shared\RabbitMQ\Exchange;
 use Shared\RabbitMQ\Queue;
 use function Shared\Resilience\retry;
@@ -36,7 +37,7 @@ function handle_place_order(array $command)
         (int)$command['number_of_tickets']
     );
 
-    // TODO: persist $order
+    DB::persist($order);
 
     foreach ($order->recordedEvents() as $event) {
         Exchange::publishEvent($event->eventData());

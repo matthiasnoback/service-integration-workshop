@@ -4,6 +4,7 @@ namespace Shared\RabbitMQ;
 
 use PhpAmqpLib\Message\AMQPMessage;
 use function Shared\CommandLine\line;
+use function Shared\CommandLine\make_magenta;
 use function Shared\CommandLine\stderr;
 use function Shared\CommandLine\stdout;
 use function Shared\Resilience\retry;
@@ -33,7 +34,7 @@ final class Exchange
             'delivery_mode' => 2 // persistent message
         ]);
 
-        stdout(line('Publish: ', $encodedData));
+        stdout(line('Published message ', make_magenta($encodedData)));
         
         self::channel()->basic_publish($amqpMessage, $exchange, $data['_type']);
     }

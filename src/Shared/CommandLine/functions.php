@@ -32,6 +32,16 @@ function make_red(string $string) : string
     return start_red() . $string . reset_color();
 }
 
+function make_cyan(string $string) : string
+{
+    return start_cyan() . $string . reset_color();
+}
+
+function make_magenta(string $string) : string
+{
+    return start_magenta() . $string . reset_color();
+}
+
 function reset_color() : string
 {
     return "\033[0m";
@@ -45,4 +55,14 @@ function start_green() : string
 function start_red() : string
 {
     return "\033[31m";
+}
+
+function start_cyan() : string
+{
+    return "\033[36m";
+}
+
+function start_magenta() : string
+{
+    return "\033[35m";
 }
