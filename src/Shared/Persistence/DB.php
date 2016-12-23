@@ -15,7 +15,7 @@ class DB
         $allData[get_class($object)][$object->id()->toString()] = $object;
         self::saveAllData($allData);
 
-        stdout(line('Persisted object ', make_cyan(get_class($object)), ':', make_cyan($object->id()->toString())));
+        stdout(line(make_cyan('Persisted'), get_class($object), ':', $object->id()->toString()));
     }
 
     public static function retrieve(string $className, UuidInterface $id)

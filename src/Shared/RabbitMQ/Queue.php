@@ -6,6 +6,7 @@ use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
 use function Shared\CommandLine\line;
 use function Shared\CommandLine\make_green;
+use function Shared\CommandLine\make_magenta;
 use function Shared\CommandLine\stderr;
 use function Shared\CommandLine\stdout;
 use function Shared\CommandLine\make_red;
@@ -30,7 +31,7 @@ final class Queue
         $channel->queue_bind($queue, $exchange, $binding);
 
         $callback = function (AMQPMessage $amqpMessage) use ($userCallback) {
-            stdout(line(make_green('Received: '), $amqpMessage->body));
+            stdout(line(make_magenta('Received'), $amqpMessage->body));
 
             try {
                 $userCallback($amqpMessage);
@@ -39,13 +40,13 @@ final class Queue
                  * You'd need to log the exception, and send the message to something like a "dead letter" exchange.
                  * For now, we just print the exception
                  */
-                stderr(line(make_red((string)$fault)));
+                stderr(line(make_red('Error'), (string)$fault));
             } finally {
                 /** @var AMQPChannel $channel */
                 $channel = $amqpMessage->delivery_info['channel'];
                 // we acknowledge anyway, to prevent the queue from flooding
                 $channel->basic_ack($amqpMessage->delivery_info['delivery_tag']);
-                stdout(line(make_green('ACK')));
+                stdout(line('ACK'));
             }
         };
 

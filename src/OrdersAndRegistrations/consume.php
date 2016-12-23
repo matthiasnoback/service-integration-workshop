@@ -5,6 +5,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 use Ramsey\Uuid\Uuid;
 use function Shared\CommandLine\line;
 use function Shared\CommandLine\make_green;
+use function Shared\CommandLine\make_yellow;
 use function Shared\CommandLine\stdout;
 use Shared\Persistence\DB;
 use Shared\RabbitMQ\Exchange;
@@ -19,7 +20,7 @@ retry(30, 1000, function () {
             $command = json_decode($AMQPMessage->body, true);
 
             if ($command['_type'] == 'orders_and_registrations.place_order') {
-                stdout(line('Handling "', $command['_type'], '"'));
+                stdout(line(make_yellow('Handling'), $command['_type']));
 
                 handle_place_order($command);
 

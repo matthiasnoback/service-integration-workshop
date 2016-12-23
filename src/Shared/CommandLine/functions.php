@@ -19,7 +19,7 @@ function write_to($handle, string $string)
 
 function line(string... $strings) : string
 {
-    return implode('', $strings) . "\n";
+    return implode(' ', $strings) . "\n";
 }
 
 function make_green(string $string) : string
@@ -40,6 +40,16 @@ function make_cyan(string $string) : string
 function make_magenta(string $string) : string
 {
     return start_magenta() . $string . reset_color();
+}
+
+function make_yellow(string $string) : string
+{
+    return start_yellow() . $string . reset_color();
+}
+
+function make_blue(string $string) : string
+{
+    return start_blue() . $string . reset_color();
 }
 
 function reset_color() : string
@@ -65,4 +75,14 @@ function start_cyan() : string
 function start_magenta() : string
 {
     return "\033[35m";
+}
+
+function start_yellow() : string
+{
+    return "\033[33m";
+}
+
+function start_blue() : string
+{
+    return "\033[34m";
 }
