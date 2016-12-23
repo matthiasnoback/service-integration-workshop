@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use OrdersAndRegistrations\Order;
 use PhpAmqpLib\Message\AMQPMessage;
