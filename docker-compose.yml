@@ -8,6 +8,12 @@ services:
           - RABBITMQ_DEFAULT_USER=user
           - RABBITMQ_DEFAULT_PASS=password
         restart: "always"
+    base:
+        build:
+            context: .
+            dockerfile: docker/base/Dockerfile
+        image: ibuildingsnl/rabbitmq_workshop_base
+        restart: "no"
     conference_web:
         build:
             context: .
@@ -20,7 +26,6 @@ services:
         links:
             - conference_management
             - rabbitmq
-        tty: true
         environment:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
             PHP_IDE_CONFIG: "serverName=conference_web"
@@ -32,7 +37,6 @@ services:
         image: ibuildingsnl/rabbitmq_workshop_conference_management
         volumes:
             - .:/code
-        tty: true
         environment:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
             PHP_IDE_CONFIG: "serverName=conference_management"
@@ -46,17 +50,10 @@ services:
             - .:/code
         links:
             - rabbitmq
-        tty: true
         environment:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
             PHP_IDE_CONFIG: "serverName=conference_management"
         restart: "on-failure:5"
-    base:
-        image: ibuildingsnl/rabbitmq_workshop_base
-        build:
-            context: .
-            dockerfile: docker/base/Dockerfile
-        restart: "no"
     devtools:
         image: ibuildingsnl/rabbitmq_workshop_devtools
         build:
