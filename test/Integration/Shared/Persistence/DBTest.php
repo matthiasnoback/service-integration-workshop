@@ -28,4 +28,24 @@ class DBTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($object, $retrievedObject);
     }
+
+    /**
+     * @test
+     */
+    public function it_throws_an_exception_for_non_persisted_objects()
+    {
+        $this->expectException(\RuntimeException::class);
+        DB::retrieve(PersistableDummy::class, Uuid::uuid4());
+    }
+
+    /**
+     * @test
+     */
+    public function it_retrieves_all_objects_by_classname()
+    {
+        DB::persist(new PersistableDummy(Uuid::uuid4()));
+        DB::persist(new PersistableDummy(Uuid::uuid4()));
+
+        $this->assertCount(2, DB::retrieveAll(PersistableDummy::class));
+    }
 }
