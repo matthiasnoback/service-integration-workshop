@@ -54,6 +54,19 @@ services:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
             PHP_IDE_CONFIG: "serverName=conference_management"
         restart: "on-failure:5"
+    orders_and_registrations_web:
+        build:
+            context: .
+            dockerfile: docker/orders_and_registrations_web/Dockerfile
+        image: ibuildingsnl/rabbitmq_workshop_orders_and_registrations_web
+        volumes:
+            - .:/code
+        links:
+            - rabbitmq
+        environment:
+            XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
+            PHP_IDE_CONFIG: "serverName=orders_and_registrations_web"
+        restart: "on-failure:5"
     devtools:
         image: ibuildingsnl/rabbitmq_workshop_devtools
         build:
