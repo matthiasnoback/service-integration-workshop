@@ -21,7 +21,18 @@ class DB
 
     public static function retrieve(string $className, UuidInterface $id)
     {
-        return self::loadAllData()[$className][$id->toString()];
+        $data = static::retrieveAll($className);
+        if (!array_key_exists($id->toString(), $data)) {
+            throw new \RuntimeException(sprintf('Unable to load %s with ID %s', $className, $id->toString()));
+        }
+
+        return $data[$id->toString()];
+    }
+
+    public static function retrieveAll(string $className): array
+    {
+        $data = self::loadAllData();
+        return $data[$className] ?? [];
     }
 
     private static function loadAllData() : array
