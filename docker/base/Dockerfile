@@ -4,4 +4,5 @@ COPY docker/base/script/* /usr/local/bin/
 RUN docker-php-ext-install bcmath
 RUN chmod +x /usr/local/bin/*
 RUN install-xdebug
+RUN docker-php-ext-install pcntl
 ENTRYPOINT ["/bin/true"]

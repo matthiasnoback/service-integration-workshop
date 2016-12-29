@@ -6,6 +6,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 use Ramsey\Uuid\Uuid;
 use function Shared\CommandLine\line;
 use function Shared\CommandLine\make_green;
+use function Shared\CommandLine\make_red;
 use function Shared\CommandLine\make_yellow;
 use function Shared\CommandLine\stdout;
 use Shared\Persistence\DB;
@@ -14,6 +15,12 @@ use Shared\RabbitMQ\Queue;
 use function Shared\Resilience\retry;
 
 require __DIR__ . '/../../vendor/autoload.php';
+
+stdout(line(make_green('Waiting')));
+pcntl_signal(SIGTERM, function() {
+    stdout(line(make_red('SIGTERM')));
+    exit(0);
+});
 
 retry(30, 1000, function () {
     Queue::consume('commands', 'orders_and_registrations.commands', 'orders_and_registrations.#',
