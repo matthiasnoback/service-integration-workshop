@@ -33,4 +33,5 @@ The website can be reached at [localhost](http://localhost).
 # Tips
 
 - Use [`docker-compose logs`](https://docs.docker.com/compose/reference/logs/) to find out what's going on in the containers.
+- Use [`docker-compose restart orders_and_registrations`](https://docs.docker.com/compose/reference/restart/) to restart a container (in this case the `orders_and_registrations` container). This is particularly relevant when you want to test changes you made to the code of the RabbitMQ consumer.
 - Run `./composer.sh require ...` to install additional packages.
