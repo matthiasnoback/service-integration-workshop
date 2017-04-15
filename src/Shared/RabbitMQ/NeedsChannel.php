@@ -3,23 +3,32 @@ declare(strict_types=1);
 
 namespace Shared\RabbitMQ;
 
-use PhpAmqpLib\Channel\AMQPChannel;
-use PhpAmqpLib\Connection\AMQPStreamConnection;
+use Bunny\Client;
+use Bunny\Channel;
 
-trait Channel
+trait NeedsChannel
 {
     private static $channel;
 
     /**
-     * @return AMQPChannel
+     * @return Channel
      */
-    protected static function channel() : AMQPChannel
+    protected static function channel() : Channel
     {
         if (self::$channel === null) {
-            $connection = new AMQPStreamConnection('rabbitmq', 5672, 'user', 'password', '/');
-            self::$channel = $connection->channel();
+            $connection = [
+                'host' => 'rabbitmq',
+                'vhost' => '/',
+                'user' => 'user',
+                'password' => 'password'
+            ];
 
-            self::$channel->exchange_declare(
+            $client = new Client($connection);
+            $client->connect();
+
+            self::$channel = $client->channel();
+
+            self::$channel->exchangeDeclare(
                 'events',
                 'topic',
                 false,  // not passive: check if exchange declarations are compatible
@@ -27,7 +36,7 @@ trait Channel
                 false // auto-delete: when no queues are bound to this exchanges, it will not be auto-deleted
             );
 
-            self::$channel->exchange_declare(
+            self::$channel->exchangeDeclare(
                 'commands',
                 'topic',
                 false,  // not passive: check if exchange declarations are compatible

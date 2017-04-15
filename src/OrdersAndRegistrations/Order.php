@@ -3,34 +3,29 @@ declare(strict_types=1);
 
 namespace OrdersAndRegistrations;
 
-use Shared\DomainModel\AggregateRoot;
-use Ramsey\Uuid\UuidInterface;
-use Shared\Persistence\CanBePersisted;
+use Common\EventSourcing\Aggregate\EventSourcedAggregate;
+use Common\EventSourcing\Aggregate\EventSourcedAggregateCapabilities;
 
-final class Order implements CanBePersisted
+final class Order implements EventSourcedAggregate
 {
-    use AggregateRoot;
+    use EventSourcedAggregateCapabilities;
 
-    private $orderId;
     private $conferenceId;
     private $numberOfTickets;
 
-    private function __construct(UuidInterface $orderId, UuidInterface $conferenceId, int $numberOfTickets)
+    public static function place(OrderId $orderId, ConferenceId $conferenceId, int $numberOfTickets): Order
     {
-        $this->orderId = $orderId;
-        $this->conferenceId = $conferenceId;
-        $this->numberOfTickets = $numberOfTickets;
+        $order = new static();
 
-        $this->recordThat(new OrderPlaced($orderId, $conferenceId, $numberOfTickets));
+        $order->recordThat(new OrderPlaced($orderId, $conferenceId, $numberOfTickets));
+
+        return $order;
     }
 
-    public static function place(UuidInterface $orderId, UuidInterface $conferenceId, int $numberOfTickets) : Order
+    private function whenOrderPlaced(OrderPlaced $event)
     {
-        return new self($orderId, $conferenceId, $numberOfTickets);
-    }
-
-    public function id() : UuidInterface
-    {
-        return $this->orderId;
+        $this->id = $event->orderId();
+        $this->conferenceId = $event->conferenceId();
+        $this->numberOfTickets = $event->numberOfTickets();
     }
 }

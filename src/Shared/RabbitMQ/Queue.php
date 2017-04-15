@@ -3,39 +3,38 @@ declare(strict_types=1);
 
 namespace Shared\RabbitMQ;
 
-use PhpAmqpLib\Channel\AMQPChannel;
-use PhpAmqpLib\Message\AMQPMessage;
-use function Shared\CommandLine\line;
-use function Shared\CommandLine\make_green;
-use function Shared\CommandLine\make_magenta;
-use function Shared\CommandLine\stderr;
-use function Shared\CommandLine\stdout;
-use function Shared\CommandLine\make_red;
-use Shared\CommandLine;
-use function Shared\Resilience\retry;
+use Assert\Assertion;
+use Bunny\Channel;
+use Bunny\Message;
+use function Common\CommandLine\line;
+use function Common\CommandLine\make_magenta;
+use function Common\CommandLine\stderr;
+use function Common\CommandLine\stdout;
+use function Common\CommandLine\make_red;
 
 final class Queue
 {
-    use Channel;
+    use NeedsChannel;
 
-    public static function consume($exchange, $queue, $binding, callable $userCallback)
+    public static function consume(string $exchange, string $queue, string $binding, callable $userCallback): void
     {
+        Assertion::notEmpty($queue);
         $channel = self::channel();
 
-        list($queue) = $channel->queue_declare(
+        $channel->queueDeclare(
             $queue,
             false, // not passive; check if queue declarations are compatible
             false, // not durable; queue won't be recreated upon server restart
             false, // not exclusive; can be shared between connections
             true // auto-delete: when all consumers have finished using it, the queue gets deleted
         );
-        $channel->queue_bind($queue, $exchange, $binding);
+        $channel->queueBind($queue, $exchange, $binding);
 
-        $callback = function (AMQPMessage $amqpMessage) use ($userCallback) {
-            stdout(line(make_magenta('Received'), $amqpMessage->body));
+        $callback = function (Message $message, Channel $channel) use ($userCallback) {
+            stdout(line(make_magenta('Received'), $message->content));
 
             try {
-                $userCallback($amqpMessage);
+                $userCallback($message);
             } catch (\Throwable $fault) {
                 /*
                  * You'd need to log the exception, and send the message to something like a "dead letter" exchange.
@@ -43,30 +42,24 @@ final class Queue
                  */
                 stderr(line(make_red('Error'), (string)$fault));
             } finally {
-                /** @var AMQPChannel $channel */
-                $channel = $amqpMessage->delivery_info['channel'];
                 // we acknowledge anyway, to prevent the queue from flooding
-                $channel->basic_ack($amqpMessage->delivery_info['delivery_tag']);
+                $channel->ack($message);
                 stdout(line('ACK'));
             }
         };
 
         // prefetch only one message at a time
-        $channel->basic_qos(null, 1, null);
+        $channel->qos(0, 1, false);
 
         // consume a message by invoking $callback
-        $channel->basic_consume(
+        $channel->run(
+            $callback,
             $queue,
             '', // consumer tag
             false, // local: also accept messages from same connection
             false, // ack: wait for ack
             false, // not exclusive: can be shared between connections
-            false, // wait: wait for a reply from the server
-            $callback
+            false // wait: wait for a reply from the server
         );
-
-        while (count($channel->callbacks)) {
-            $channel->wait();
-        }
     }
 }

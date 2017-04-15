@@ -7,47 +7,62 @@ namespace ConferenceManagement;
  * @Entity
  * @AnemicDomainModel
  */
-final class Conference implements \JsonSerializable
+final class Conference
 {
+    /**
+     * @var string
+     */
     private $id;
-    private $name;
-    private $start;
-    private $end;
-    private $city;
 
     /**
-     * @param $id
-     * @param $name
+     * @var string
      */
-    public function __construct($id, $name, \DateTime $start, \DateTime $end, $city)
+    private $name;
+
+    /**
+     * @var string
+     */
+    private $start;
+
+    /**
+     * @var string
+     */
+    private $end;
+
+    /**
+     * @var string
+     */
+    private $city;
+
+    public function __construct(string $id, string $name, \DateTimeImmutable $start, \DateTimeImmutable $end, $city)
     {
-        $this->id = $id;
-        $this->name = $name;
-        $this->start = $start;
-        $this->end = $end;
-        $this->city = $city;
+        $this->setId($id);
+        $this->setName($name);
+        $this->setStart($start);
+        $this->setEnd($end);
+        $this->setCity($city);
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
 
     /**
-     * @param mixed $id
+     * @param string $id
      */
-    public function setId($id)
+    public function setId(string $id): void
     {
         $this->id = $id;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -55,47 +70,47 @@ final class Conference implements \JsonSerializable
     /**
      * @param mixed $name
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeImmutable
      */
-    public function getStart()
+    public function getStart(): \DateTimeImmutable
     {
         return $this->start;
     }
 
     /**
-     * @param \DateTime $start
+     * @param \DateTimeImmutable $start
      */
-    public function setStart($start)
+    public function setStart(\DateTimeImmutable $start): void
     {
-        $this->start = $start;
+        $this->start = $start->format(\DateTime::ATOM);
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeImmutable
      */
-    public function getEnd()
+    public function getEnd(): \DateTimeImmutable
     {
         return $this->end;
     }
 
     /**
-     * @param \DateTime $end
+     * @param \DateTimeImmutable $end
      */
-    public function setEnd($end)
+    public function setEnd(\DateTimeImmutable $end): void
     {
-        $this->end = $end;
+        $this->end = $end->format(\DateTime::ATOM);
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getCity()
+    public function getCity(): string
     {
         return $this->city;
     }
@@ -103,7 +118,7 @@ final class Conference implements \JsonSerializable
     /**
      * @param mixed $city
      */
-    public function setCity($city)
+    public function setCity(string $city): void
     {
         $this->city = $city;
     }

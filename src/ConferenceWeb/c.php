@@ -6,24 +6,24 @@ use Shared\RabbitMQ\Exchange;
 
 function order()
 {
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
         $command = $_POST;
-        $command['order_id'] = Uuid::uuid4();
-        $command['_type'] = 'orders_and_registrations.place_order';
+        $command['orderId'] = (string)Uuid::uuid4();
 
-        Exchange::publishCommand($command);
+        Exchange::publishCommand('orders_and_registrations.place_order', $command);
 
-        header('Location: /?c=thank_you&orderId=' . $command['order_id']);
+        header('Location: /?c=thank_you&orderId=' . $command['orderId']);
         exit;
     }
 
-    $conferences = json_decode(file_get_contents('http://conference_management/?c=list_conferences'), true);
+    $conferences = json_decode(file_get_contents('http://conference_management:8080/?c=list_conferences'), true);
 
     ?>
     <form action="#" method="post">
         <div>
-            <label for="conference_id">Select a conference:</label>
-            <select id="conference_id" name="conference_id">
+            <label for="conferenceId">Select a conference:</label>
+            <select id="conferenceId" name="conferenceId">
                 <?php foreach ($conferences as $conference): ?>
                     <option value="<?php echo $conference['id']; ?>"><?php echo htmlentities($conference['name'],
                             ENT_QUOTES); ?></option>
@@ -31,14 +31,12 @@ function order()
             </select>
         </div>
         <div>
-            <label for="number_of_tickets">Number of tickets:</label> <input id="number_of_tickets"
-                                                                             name="number_of_tickets" type="number"/>
+            <label for="numberOfTickets">Number of tickets:</label> <input id="numberOfTickets"
+                                                                           name="numberOfTickets" type="number"/>
         </div>
         <button type="submit">Place order</button>
     </form>
     <?php
-
-    exit;
 }
 
 function thank_you()

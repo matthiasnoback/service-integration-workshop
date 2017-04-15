@@ -3,27 +3,42 @@ declare(strict_types=1);
 
 namespace OrdersAndRegistrations;
 
-use Ramsey\Uuid\UuidInterface;
-use Shared\DomainModel\PublishableDomainEvent;
-
-final class OrderPlaced implements PublishableDomainEvent
+final class OrderPlaced
 {
+    /**
+     * @var OrderId
+     */
     private $orderId;
+
+    /**
+     * @var ConferenceId
+     */
     private $conferenceId;
+
+    /**
+     * @var int
+     */
     private $numberOfTickets;
 
-    public function __construct(UuidInterface $orderId, UuidInterface $conferenceId, int $numberOfTickets)
+    public function __construct(OrderId $orderId, ConferenceId $conferenceId, int $numberOfTickets)
     {
         $this->orderId = $orderId;
         $this->conferenceId = $conferenceId;
         $this->numberOfTickets = $numberOfTickets;
     }
 
-    public function eventData() : array
+    public function orderId(): OrderId
     {
-        return array_merge(
-            get_object_vars($this),
-            ['_type' => 'orders_and_registrations.order_placed']
-        );
+        return $this->orderId;
+    }
+
+    public function conferenceId(): ConferenceId
+    {
+        return $this->conferenceId;
+    }
+
+    public function numberOfTickets(): int
+    {
+        return $this->numberOfTickets;
     }
 }

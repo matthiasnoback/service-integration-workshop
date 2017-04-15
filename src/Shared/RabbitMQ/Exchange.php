@@ -3,40 +3,45 @@ declare(strict_types=1);
 
 namespace Shared\RabbitMQ;
 
-use PhpAmqpLib\Message\AMQPMessage;
-use function Shared\CommandLine\line;
-use function Shared\CommandLine\make_blue;
-use function Shared\CommandLine\stderr;
-use function Shared\CommandLine\stdout;
-use function Shared\Resilience\retry;
+use NaiveSerializer\Serializer;
+use function Common\CommandLine\line;
+use function Common\CommandLine\make_blue;
+use function Common\CommandLine\stdout;
+use function Common\Resilience\retry;
 
 final class Exchange
 {
-    use Channel;
+    use NeedsChannel;
 
-    public static function publishEvent(array $event)
+    public static function publishEvent(string $type, $event): void
     {
-        retry(30, 1000, function() use ($event) {
-            self::publish($event, 'events');
+        retry(15, 1000, function () use ($type, $event) {
+            self::publish($type, $event, 'events');
         });
     }
 
-    public static function publishCommand(array $command)
+    public static function publishCommand(string $type, $command): void
     {
-        retry(30, 1000, function() use ($command) {
-            self::publish($command, 'commands');
+        retry(15, 1000, function () use ($type, $command) {
+            self::publish($type, $command, 'commands');
         });
     }
 
-    private static function publish(array $data, string $exchange)
+    private static function publish(string $type, $data, string $exchange): void
     {
-        $encodedData = json_encode($data);
-        $amqpMessage = new AMQPMessage($encodedData, [
-            'delivery_mode' => 2 // persistent message
-        ]);
+        $serializedData = Serializer::serialize($data);
 
-        stdout(line(make_blue('Published'), $encodedData));
-        
-        self::channel()->basic_publish($amqpMessage, $exchange, $data['_type']);
+        self::channel()->publish(
+            $serializedData,
+            [
+                'delivery_mode' => 2, // persistent message
+                'content_type' => 'application/json',
+                'message_type' => $type
+            ],
+            $exchange,
+            $type
+        );
+
+        stdout(line(make_blue('Published'), $serializedData));
     }
 }
