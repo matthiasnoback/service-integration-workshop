@@ -9,6 +9,8 @@ namespace ConferenceManagement;
  */
 final class Conference
 {
+    const DATE_TIME_FORMAT = \DateTime::ATOM;
+
     /**
      * @var string
      */
@@ -80,7 +82,7 @@ final class Conference
      */
     public function getStart(): \DateTimeImmutable
     {
-        return $this->start;
+        return \DateTimeImmutable::createFromFormat(self::DATE_TIME_FORMAT, $this->start);
     }
 
     /**
@@ -88,7 +90,7 @@ final class Conference
      */
     public function setStart(\DateTimeImmutable $start): void
     {
-        $this->start = $start->format(\DateTime::ATOM);
+        $this->start = $start->format(self::DATE_TIME_FORMAT);
     }
 
     /**
@@ -96,7 +98,7 @@ final class Conference
      */
     public function getEnd(): \DateTimeImmutable
     {
-        return $this->end;
+        return \DateTimeImmutable::createFromFormat(self::DATE_TIME_FORMAT, $this->end);
     }
 
     /**
@@ -104,7 +106,7 @@ final class Conference
      */
     public function setEnd(\DateTimeImmutable $end): void
     {
-        $this->end = $end->format(\DateTime::ATOM);
+        $this->end = $end->format(self::DATE_TIME_FORMAT);
     }
 
     /**
@@ -121,10 +123,5 @@ final class Conference
     public function setCity(string $city): void
     {
         $this->city = $city;
-    }
-
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 }

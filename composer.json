@@ -20,11 +20,7 @@
   "autoload": {
     "psr-4": {
       "": "src/"
-    },
-    "files": [
-      "src/Shared/CommandLine/functions.php",
-      "src/Shared/Resilience/functions.php"
-    ]
+    }
   },
   "autoload-dev": {
     "psr-4": {
