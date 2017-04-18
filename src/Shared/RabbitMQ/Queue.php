@@ -10,7 +10,6 @@ use function Common\CommandLine\make_green;
 use function Common\CommandLine\stderr;
 use function Common\CommandLine\stdout;
 use function Common\CommandLine\make_red;
-use Shared\StringUtil;
 
 final class Queue
 {

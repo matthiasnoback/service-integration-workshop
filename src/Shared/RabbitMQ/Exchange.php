@@ -8,7 +8,6 @@ use NaiveSerializer\Serializer;
 use function Common\CommandLine\line;
 use function Common\CommandLine\stdout;
 use function Common\Resilience\retry;
-use Shared\StringUtil;
 
 final class Exchange
 {

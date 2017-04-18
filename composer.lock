@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2689a44868abf2b745855fa9aeb6a2d0",
+    "content-hash": "d03aa010b0f4fccdbeb73ec59b079641",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -303,62 +303,6 @@
             "time": "2017-03-20T17:10:46+00:00"
         },
         {
-            "name": "jamesmoss/flywheel",
-            "version": "0.5.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jamesmoss/flywheel.git",
-                "reference": "869eced5f6b7b11599aa96b753e3540054ca85de"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jamesmoss/flywheel/zipball/869eced5f6b7b11599aa96b753e3540054ca85de",
-                "reference": "869eced5f6b7b11599aa96b753e3540054ca85de",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.2"
-            },
-            "require-dev": {
-                "mikey179/vfsstream": "1.2.0",
-                "mockery/mockery": "dev-master@dev",
-                "mustangostang/spyc": "0.5.*@dev",
-                "phpunit/phpunit": "3.7.*"
-            },
-            "suggest": {
-                "mustangostang/spyc": "You must install this if you're using the YAML or Markdown formatters."
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "JamesMoss\\Flywheel\\": [
-                        "src/",
-                        "test/"
-                    ]
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "James Moss",
-                    "email": "james@moss.io",
-                    "homepage": "http://moss.io"
-                }
-            ],
-            "description": "A lightweight, flat-file, document database",
-            "homepage": "http://github.com/jamesmoss/flywheel",
-            "keywords": [
-                "db",
-                "document",
-                "file",
-                "flat"
-            ],
-            "time": "2017-01-31T09:48:58+00:00"
-        },
-        {
             "name": "justinrainbow/json-schema",
             "version": "5.2.0",
             "source": {
@@ -467,21 +411,20 @@
         },
         {
             "name": "matthiasnoback/php-workshop-tools",
-            "version": "v0.5.0",
+            "version": "v0.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasnoback/php-workshop-tools.git",
-                "reference": "3d2894b53d965c93c1fedddbc8d08da32161edfd"
+                "reference": "d0635662ff7b880578513e4bfd7fe5ed50a4811f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasnoback/php-workshop-tools/zipball/3d2894b53d965c93c1fedddbc8d08da32161edfd",
-                "reference": "3d2894b53d965c93c1fedddbc8d08da32161edfd",
+                "url": "https://api.github.com/repos/matthiasnoback/php-workshop-tools/zipball/d0635662ff7b880578513e4bfd7fe5ed50a4811f",
+                "reference": "d0635662ff7b880578513e4bfd7fe5ed50a4811f",
                 "shasum": ""
             },
             "require": {
                 "beberlei/assert": "^2.7",
-                "jamesmoss/flywheel": "^0.5.2",
                 "matthiasnoback/naive-serializer": "^0.4",
                 "php": "^7.1",
                 "ramsey/uuid": "^3.4",
@@ -510,7 +453,7 @@
                     "email": "matthiasnoback@gmail.com"
                 }
             ],
-            "time": "2017-04-16T12:41:32+00:00"
+            "time": "2017-04-18T09:44:04+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -1364,6 +1307,62 @@
                 "instantiate"
             ],
             "time": "2015-06-14T21:17:01+00:00"
+        },
+        {
+            "name": "jamesmoss/flywheel",
+            "version": "0.5.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jamesmoss/flywheel.git",
+                "reference": "869eced5f6b7b11599aa96b753e3540054ca85de"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jamesmoss/flywheel/zipball/869eced5f6b7b11599aa96b753e3540054ca85de",
+                "reference": "869eced5f6b7b11599aa96b753e3540054ca85de",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "mikey179/vfsstream": "1.2.0",
+                "mockery/mockery": "dev-master@dev",
+                "mustangostang/spyc": "0.5.*@dev",
+                "phpunit/phpunit": "3.7.*"
+            },
+            "suggest": {
+                "mustangostang/spyc": "You must install this if you're using the YAML or Markdown formatters."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "JamesMoss\\Flywheel\\": [
+                        "src/",
+                        "test/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "James Moss",
+                    "email": "james@moss.io",
+                    "homepage": "http://moss.io"
+                }
+            ],
+            "description": "A lightweight, flat-file, document database",
+            "homepage": "http://github.com/jamesmoss/flywheel",
+            "keywords": [
+                "db",
+                "document",
+                "file",
+                "flat"
+            ],
+            "time": "2017-01-31T09:48:58+00:00"
         },
         {
             "name": "myclabs/deep-copy",

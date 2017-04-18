@@ -6,7 +6,7 @@ namespace OrdersAndRegistrations;
 use Common\EventDispatcher\EventDispatcher;
 use Common\EventSourcing\Aggregate\Repository\EventSourcedAggregateRepository;
 use Common\EventSourcing\EventStore\EventStore;
-use Common\EventSourcing\EventStore\Storage\FlywheelStorageFacility;
+use Common\EventSourcing\EventStore\Storage\DatabaseStorageFacility;
 use NaiveSerializer\JsonSerializer;
 use Shared\RabbitMQ\Exchange;
 
@@ -43,7 +43,7 @@ final class Application
         if ($orderRepository === null) {
             $orderRepository = $orderRepository ?? new EventSourcedAggregateRepository(
                     new EventStore(
-                        new FlywheelStorageFacility(__DIR__ . '/../../var/db/orders_and_registrations'),
+                        new DatabaseStorageFacility(),
                         $this->eventDispatcher(),
                         new JsonSerializer()
                     ),

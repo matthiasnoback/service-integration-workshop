@@ -15,7 +15,7 @@ services:
         environment:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
             PHP_IDE_CONFIG: "serverName=conference_web"
-            SERVICE_NAME: conference_web
+            DB_PATH: /opt/var/db/conference_web
         restart: "on-failure:5"
 
     conference_management:
@@ -27,7 +27,7 @@ services:
         environment:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
             PHP_IDE_CONFIG: "serverName=conference_management"
-            SERVICE_NAME: conference_management
+            DB_PATH: /opt/var/db/conference_management
         restart: "on-failure:5"
 
     orders_and_registrations:
@@ -41,7 +41,7 @@ services:
         environment:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
             PHP_IDE_CONFIG: "serverName=orders_and_registrations"
-            SERVICE_NAME: orders_and_registrations
+            DB_PATH: /opt/var/db/orders_and_registrations
         restart: "on-failure:5"
 
     orders_and_registrations_web:
@@ -57,7 +57,7 @@ services:
         environment:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
             PHP_IDE_CONFIG: "serverName=orders_and_registrations_web"
-            SERVICE_NAME: orders_and_registrations_web
+            DB_PATH: /opt/var/db/orders_and_registrations
         restart: "on-failure:5"
 
     external_payment_provider:
@@ -71,7 +71,7 @@ services:
         environment:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
             PHP_IDE_CONFIG: "serverName=external_payment_provider"
-            SERVICE_NAME: external_payment_provider
+            DB_PATH: /opt/var/db/external_payment_provider
         restart: "on-failure:5"
 
     redis:
@@ -92,14 +92,15 @@ services:
         ports:
             - 15672:15672
         environment:
-          - RABBITMQ_DEFAULT_USER=user
-          - RABBITMQ_DEFAULT_PASS=password
+            - RABBITMQ_DEFAULT_USER=user
+            - RABBITMQ_DEFAULT_PASS=password
         restart: "on-failure:5"
 
     mailcatcher:
         image: schickling/mailcatcher
         ports:
             - 1080:1080
+        restart: "on-failure:5"
 
     devtools:
         image: matthiasnoback/php_workshop_tools_base
