@@ -10,6 +10,11 @@ trait NeedsChannel
 {
     private static $channel;
 
+    private static function exchangeName(): string
+    {
+        return 'messages';
+    }
+
     /**
      * @return Channel
      */
@@ -29,15 +34,7 @@ trait NeedsChannel
             self::$channel = $client->channel();
 
             self::$channel->exchangeDeclare(
-                'events',
-                'topic',
-                false,  // not passive: check if exchange declarations are compatible
-                false, // not durable: exchange won't be recreated upon server restart
-                false // auto-delete: when no queues are bound to this exchanges, it will not be auto-deleted
-            );
-
-            self::$channel->exchangeDeclare(
-                'commands',
+                static::exchangeName(),
                 'topic',
                 false,  // not passive: check if exchange declarations are compatible
                 false, // not durable: exchange won't be recreated upon server restart

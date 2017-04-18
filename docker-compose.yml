@@ -37,6 +37,7 @@ services:
             - .:/opt
         depends_on:
             - rabbitmq
+            - mailcatcher
         environment:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
             PHP_IDE_CONFIG: "serverName=orders_and_registrations"
@@ -95,6 +96,11 @@ services:
           - RABBITMQ_DEFAULT_PASS=password
         restart: "on-failure:5"
 
+    mailcatcher:
+        image: schickling/mailcatcher
+        ports:
+            - 1080:1080
+
     devtools:
         image: matthiasnoback/php_workshop_tools_base
         user: $HOST_UID:$HOST_GID
@@ -102,5 +108,5 @@ services:
             COMPOSER_HOME: "/home/.composer"
         volumes:
             - ${PWD}:/opt
-            - "${COMPOSER_HOME}:/home/.composer"
+            - ${COMPOSER_HOME}:/home/.composer
         restart: "no"

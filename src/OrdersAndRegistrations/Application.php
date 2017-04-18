@@ -25,7 +25,15 @@ final class Application
 
     public function onOrderPlaced(OrderPlaced $event): void
     {
-        Exchange::publishEvent('orders_and_registrations.order_placed', $event);
+        Exchange::publish('orders_and_registrations.order_placed', $event);
+
+        $email = \Swift_Message::newInstance()
+            ->setTo(['noreply@mywebsite.com'])
+            ->setFrom(['noreply@mywebsite.com'])
+            ->setSubject('Thanks for your order')
+            ->setBody('Test');
+
+        $this->mailer()->send($email);
     }
 
     private function orderRepository(): EventSourcedAggregateRepository
@@ -58,5 +66,17 @@ final class Application
         }
 
         return $eventDispatcher;
+    }
+
+    private function mailer(): \Swift_Mailer
+    {
+        static $mailer;
+
+        if ($mailer === null) {
+            $transport = \Swift_SmtpTransport::newInstance('mailcatcher', 1025);
+            $mailer = \Swift_Mailer::newInstance($transport);
+        }
+
+        return $mailer;
     }
 }

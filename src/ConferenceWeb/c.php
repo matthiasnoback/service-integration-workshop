@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use Ramsey\Uuid\Uuid;
 use Shared\RabbitMQ\Exchange;
+use Shared\StringUtil;
 
 function order()
 {
@@ -11,7 +12,7 @@ function order()
         $command = $_POST;
         $command['orderId'] = (string)Uuid::uuid4();
 
-        Exchange::publishCommand('orders_and_registrations.place_order', $command);
+        Exchange::publish('orders_and_registrations.place_order', $command);
 
         header('Location: /?c=thank_you&orderId=' . $command['orderId']);
         exit;
@@ -25,8 +26,7 @@ function order()
             <label for="conferenceId">Select a conference:</label>
             <select id="conferenceId" name="conferenceId">
                 <?php foreach ($conferences as $conference): ?>
-                    <option value="<?php echo $conference['id']; ?>"><?php echo htmlentities($conference['name'],
-                            ENT_QUOTES); ?></option>
+                    <option value="<?php echo $conference['id']; ?>"><?php echo StringUtil::escapeHtml($conference['name']); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
