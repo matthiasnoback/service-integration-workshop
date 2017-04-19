@@ -28,7 +28,6 @@ final class Application
         $this->orderRepository()->save($order);
 
         header('Content-Type: text/plain', true, 200);
-        echo 'Thank you for ordering your ticket(s).';
         exit;
     }
 
