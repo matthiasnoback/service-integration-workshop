@@ -12,6 +12,16 @@ When the Docker images have been pulled, you should first install project depend
 
 Follow the general advice from the [php-workshop-tools README](https://github.com/matthiasnoback/php-workshop-tools) about setting the correct environment variables and configuring PhpStorm. **Don't skip this step!**
 
+To make the `external_payment_provider` work, you'll need to create a `docker-compose.override.yml` file, containing your [Stripe](https://dashboard.stripe.com/test/dashboard) test API keys:
+
+    version: '2'
+    
+    services:
+        external_payment_provider:
+            environment:
+                PUBLISHABLE_STRIPE_API_KEY: "pk_test_..."
+                SECRET_STRIPE_API_KEY: "sk_test_...7"
+
 Then you can finally run:
 
     docker-compose up -d
