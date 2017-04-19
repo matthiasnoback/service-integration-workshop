@@ -21,6 +21,8 @@ services:
     conference_management:
         image: matthiasnoback/php_workshop_tools_simple_webserver
         command: src/ConferenceManagement/
+        ports:
+            - 8083:8080
         volumes:
             - .:/opt
         tty: true

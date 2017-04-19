@@ -70,7 +70,7 @@ final class Conference
     }
 
     /**
-     * @param mixed $name
+     * @param string $name
      */
     public function setName(string $name): void
     {
@@ -118,7 +118,7 @@ final class Conference
     }
 
     /**
-     * @param mixed $city
+     * @param string $city
      */
     public function setCity(string $city): void
     {

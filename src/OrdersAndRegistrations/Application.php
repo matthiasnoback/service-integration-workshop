@@ -8,12 +8,17 @@ use Common\EventSourcing\Aggregate\Repository\EventSourcedAggregateRepository;
 use Common\EventSourcing\EventStore\EventStore;
 use Common\EventSourcing\EventStore\Storage\DatabaseStorageFacility;
 use NaiveSerializer\JsonSerializer;
+use NaiveSerializer\Serializer;
 use Shared\RabbitMQ\Exchange;
 
 final class Application
 {
-    public function handlePlaceOrder(PlaceOrder $command): void
+    public function placeOrderController(): void
     {
+        $requestBody = file_get_contents('php://input');
+
+        $command = Serializer::deserialize(PlaceOrder::class, $requestBody);
+
         $order = Order::place(
             OrderId::fromString($command->orderId),
             ConferenceId::fromString($command->conferenceId),
@@ -21,6 +26,10 @@ final class Application
         );
 
         $this->orderRepository()->save($order);
+
+        header('Content-Type: text/plain', true, 200);
+        echo 'Thank you for ordering your ticket(s).';
+        exit;
     }
 
     public function onOrderPlaced(OrderPlaced $event): void
