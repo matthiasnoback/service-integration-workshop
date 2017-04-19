@@ -11,7 +11,8 @@
     "symfony/var-dumper": "^3.2",
     "beberlei/assert": "^2.7",
     "predis/predis": "^1.1",
-    "swiftmailer/swiftmailer": "^5.4"
+    "swiftmailer/swiftmailer": "^5.4",
+    "pusher/pusher-php-server": "^2.6"
   },
   "require-dev": {
     "phpunit/phpunit": "^5.5"

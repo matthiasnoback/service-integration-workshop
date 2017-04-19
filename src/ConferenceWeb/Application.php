@@ -53,6 +53,22 @@ final class Application
 
     public function thankYouController()
     {
-        ?>Thank you for ordering your ticket(s).<?php
+        ?>
+        Thank you for ordering your ticket(s).
+        <script src="https://js.pusher.com/4.0/pusher.min.js"></script>
+        <script>
+            Pusher.logToConsole = true;
+
+            var pusher = new Pusher('<?php echo getenv('PUSHER_KEY'); ?>', {
+                cluster: 'eu',
+                encrypted: true
+            });
+
+            var channel = pusher.subscribe('my-channel');
+            channel.bind('my-event', function(data) {
+                alert(data.message);
+            });
+        </script>
+        <?php
     }
 }

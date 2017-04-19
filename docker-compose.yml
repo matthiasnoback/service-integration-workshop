@@ -12,6 +12,7 @@ services:
             - conference_management
             - rabbitmq
         tty: true
+        env_file: .env
         environment:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
             PHP_IDE_CONFIG: "serverName=conference_web"
@@ -26,6 +27,7 @@ services:
         volumes:
             - .:/opt
         tty: true
+        env_file: .env
         environment:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
             PHP_IDE_CONFIG: "serverName=conference_management"
@@ -40,6 +42,7 @@ services:
         depends_on:
             - rabbitmq
             - mailcatcher
+        env_file: .env
         environment:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
             PHP_IDE_CONFIG: "serverName=orders_and_registrations"
@@ -56,6 +59,7 @@ services:
         ports:
             - 8081:8080
         tty: true
+        env_file: .env
         environment:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
             PHP_IDE_CONFIG: "serverName=orders_and_registrations_web"
@@ -70,6 +74,7 @@ services:
         ports:
             - 8082:8080
         tty: true
+        env_file: .env
         environment:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
             PHP_IDE_CONFIG: "serverName=external_payment_provider"
@@ -112,4 +117,12 @@ services:
         volumes:
             - ${PWD}:/opt
             - ${COMPOSER_HOME}:/home/.composer
+        restart: "no"
+
+    test_pusher:
+        image: matthiasnoback/php_workshop_tools_base
+        command: php src/OrdersAndRegistrations/test_pusher.php
+        volumes:
+            - ${PWD}:/opt
+        env_file: .env
         restart: "no"
