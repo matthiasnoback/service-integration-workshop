@@ -7,9 +7,9 @@ use Common\EventDispatcher\EventDispatcher;
 use Common\EventSourcing\Aggregate\Repository\EventSourcedAggregateRepository;
 use Common\EventSourcing\EventStore\EventStore;
 use Common\EventSourcing\EventStore\Storage\DatabaseStorageFacility;
+use Common\Persistence\Database;
 use NaiveSerializer\JsonSerializer;
 use NaiveSerializer\Serializer;
-use Shared\RabbitMQ\Exchange;
 
 final class Application
 {
@@ -25,15 +25,7 @@ final class Application
             (int)$command->numberOfTickets
         );
 
-        $this->orderRepository()->save($order);
-
-        header('Content-Type: text/plain', true, 200);
-        exit;
-    }
-
-    public function onOrderPlaced(OrderPlaced $event): void
-    {
-        Exchange::publish('orders_and_registrations.order_placed', $event);
+        Database::persist($order);
 
         $email = \Swift_Message::newInstance()
             ->setTo(['noreply@mywebsite.com'])
@@ -42,6 +34,14 @@ final class Application
             ->setBody('Test');
 
         $this->mailer()->send($email);
+
+        header('Content-Type: text/plain', true, 200);
+        exit;
+    }
+
+    public function whenOrderPlaced(OrderPlaced $event)
+    {
+        // respond to OrderPlaced event
     }
 
     private function orderRepository(): EventSourcedAggregateRepository
@@ -69,7 +69,7 @@ final class Application
         if ($eventDispatcher === null) {
             $eventDispatcher = new EventDispatcher();
 
-            $eventDispatcher->registerSubscriber(OrderPlaced::class, [$this, 'onOrderPlaced']);
+            $eventDispatcher->registerSubscriber(OrderPlaced::class, [$this, 'whenOrderPlaced']);
 
         }
 

@@ -126,3 +126,19 @@ services:
             - ${PWD}:/opt
         env_file: .env
         restart: "no"
+
+    test_redis:
+        image: matthiasnoback/php_workshop_tools_base
+        command: php src/ConferenceWeb/test_redis.php
+        volumes:
+            - ${PWD}:/opt
+        env_file: .env
+        restart: "no"
+
+    timer:
+        image: matthiasnoback/php_workshop_tools_base
+        command: php src/OrdersAndRegistrations/timer.php
+        volumes:
+            - ${PWD}:/opt
+        env_file: .env
+        restart: "on-failure:5"

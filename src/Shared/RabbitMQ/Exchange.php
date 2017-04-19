@@ -13,6 +13,12 @@ final class Exchange
 {
     use NeedsChannel;
 
+    /**
+     * Publish a message to the default exchange.
+     *
+     * @param string $type An arbitrary string describing the type of message you're publishing
+     * @param mixed $data Any data that should be sent as the message content (it will be serialized first)
+     */
     public static function publish(string $type, $data): void
     {
         retry(15, 1000, function () use ($type, $data) {

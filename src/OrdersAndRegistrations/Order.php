@@ -3,29 +3,37 @@ declare(strict_types=1);
 
 namespace OrdersAndRegistrations;
 
-use Common\EventSourcing\Aggregate\EventSourcedAggregate;
-use Common\EventSourcing\Aggregate\EventSourcedAggregateCapabilities;
-
-final class Order implements EventSourcedAggregate
+final class Order
 {
-    use EventSourcedAggregateCapabilities;
+    /**
+     * @var OrderId
+     */
+    private $id;
 
+    /**
+     * @var ConferenceId
+     */
     private $conferenceId;
+
+    /**
+     * @var int
+     */
     private $numberOfTickets;
+
+    private function __construct(OrderId $orderId, ConferenceId $conferenceId, int $numberOfTickets)
+    {
+        $this->id = $orderId;
+        $this->conferenceId = $conferenceId;
+        $this->numberOfTickets = $numberOfTickets;
+    }
 
     public static function place(OrderId $orderId, ConferenceId $conferenceId, int $numberOfTickets): Order
     {
-        $order = new static();
-
-        $order->recordThat(new OrderPlaced($orderId, $conferenceId, $numberOfTickets));
-
-        return $order;
+        return new self($orderId, $conferenceId, $numberOfTickets);
     }
 
-    private function whenOrderPlaced(OrderPlaced $event)
+    public function id()
     {
-        $this->id = $event->orderId();
-        $this->conferenceId = $event->conferenceId();
-        $this->numberOfTickets = $event->numberOfTickets();
+        return $this->id;
     }
 }

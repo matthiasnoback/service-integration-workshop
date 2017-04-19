@@ -53,6 +53,8 @@ final class Queue
         // prefetch only one message at a time
         $channel->qos(0, 1, false);
 
+        stdout(line(make_green('Waiting...')));
+
         // consume a message by invoking $callback
         $channel->run(
             $callback,
