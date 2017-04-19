@@ -1,22 +1,26 @@
 # Getting started
 
-Clone this project. Make sure you have `docker` and `docker-compose` installed on your host machine.
+1. Clone this project. Make sure you have `docker` and `docker-compose` installed on your host machine.
+2. Create an empty `.env` file in the root directory of the project.
+3. Then, run:
 
-Run:
-
+    ```
     docker-compose pull
+    ```
 
-When the Docker images have been pulled, you should first install project dependencies using Composer:
+4. When the Docker images have been pulled, you should first install project dependencies using Composer:
 
+    ```
     ./composer.sh install
+    ```
 
-Follow the general advice from the [php-workshop-tools README](https://github.com/matthiasnoback/php-workshop-tools) about setting the correct environment variables and configuring PhpStorm. **Don't skip this step!**
-
-To make integration with [Stripe](https://dashboard.stripe.com/test/dashboard) and [Pusher](https://dashboard.pusher.com/) work, create accounts for these services. Copy `.env.dist` to `.env` and paste your API keys in there. For Pusher, you should first create an "app".
-
-Then you can finally run:
-
+5. Follow the general advice from the [php-workshop-tools README](https://github.com/matthiasnoback/php-workshop-tools) about setting the correct environment variables and configuring PhpStorm. **Don't skip this step!**
+6. To integrate with [Stripe](https://dashboard.stripe.com/test/dashboard) and [Pusher](https://dashboard.pusher.com/), create accounts for these services. Copy the contents of `.env.dist` to the `.env` you just created and paste your API keys in there. For Pusher, you should first create an "app".
+7. Then you can finally run:
+    
+    ```
     docker-compose up -d
+    ```
 
 # Useful UIs
 
