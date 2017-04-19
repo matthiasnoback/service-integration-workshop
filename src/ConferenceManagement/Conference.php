@@ -9,7 +9,7 @@ namespace ConferenceManagement;
  */
 final class Conference
 {
-    const DATE_TIME_FORMAT = \DateTime::ATOM;
+    private const DATE_TIME_FORMAT = \DateTime::ATOM;
 
     /**
      * @var string
@@ -51,6 +51,11 @@ final class Conference
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public function id()
+    {
+        return $this->getId();
     }
 
     /**
