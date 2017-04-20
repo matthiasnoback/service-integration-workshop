@@ -32,6 +32,7 @@ retry(3, 1000, function () use ($app) {
 //                    $app->redis()->hget('conferences', $eventData->id)
 //                );
             }
-        }
+        },
+        'conference_web'
     );
 });

@@ -37,6 +37,7 @@ retry(3, 1000, function () use ($app) {
 
                 $app->placeOrder($command);
             }
-        }
+        },
+        'orders_and_registrations'
     );
 });

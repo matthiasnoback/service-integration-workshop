@@ -59,7 +59,7 @@ final class Application
             });
 
             var channel = pusher.subscribe('my-channel');
-            channel.bind('my-event', function(data) {
+            channel.bind('my-event', function (data) {
                 alert(data.message);
             });
         </script>
@@ -72,7 +72,7 @@ final class Application
 
         if ($client === null) {
             $client = new Client([
-                    'host' => 'redis'
+                'host' => 'redis'
             ]);
         }
 

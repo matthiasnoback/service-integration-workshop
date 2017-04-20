@@ -15,14 +15,14 @@ final class Queue
 {
     use NeedsChannel;
 
-    public static function consume(callable $userCallback): void
+    public static function consume(callable $userCallback, $queueName = ''): void
     {
         $channel = self::channel();
 
         $result = $channel->queueDeclare(
-            '',
+            $queueName,
             false, // not passive; check if queue declarations are compatible
-            false, // not durable; queue won't be recreated upon server restart
+            true, // not durable; queue won't be recreated upon server restart
             false, // not exclusive; can be shared between connections
             true // auto-delete: when all consumers have finished using it, the queue gets deleted
         );
