@@ -7,7 +7,6 @@ use Common\EventDispatcher\EventDispatcher;
 use Common\EventSourcing\Aggregate\Repository\EventSourcedAggregateRepository;
 use Common\EventSourcing\EventStore\EventStore;
 use Common\EventSourcing\EventStore\Storage\DatabaseStorageFacility;
-use Common\Persistence\Database;
 use NaiveSerializer\JsonSerializer;
 
 final class Application

@@ -11,11 +11,6 @@ final class Order implements EventSourcedAggregate
     use EventSourcedAggregateCapabilities;
 
     /**
-     * @var OrderId
-     */
-    private $id;
-
-    /**
      * @var ConferenceId
      */
     private $conferenceId;
