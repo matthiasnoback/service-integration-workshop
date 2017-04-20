@@ -20,8 +20,11 @@ final class Application
             (int)$command->numberOfTickets
         );
 
-        Database::persist($order);
+        $this->orderRepository()->save($order);
+    }
 
+    public function whenOrderPlaced(OrderPlaced $event)
+    {
         $email = \Swift_Message::newInstance()
             ->setTo(['noreply@mywebsite.com'])
             ->setFrom(['noreply@mywebsite.com'])
@@ -29,11 +32,6 @@ final class Application
             ->setBody('Test');
 
         $this->mailer()->send($email);
-    }
-
-    public function whenOrderPlaced(OrderPlaced $event)
-    {
-        // respond to OrderPlaced event
     }
 
     private function orderRepository(): EventSourcedAggregateRepository

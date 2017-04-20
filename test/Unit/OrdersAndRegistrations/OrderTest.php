@@ -16,8 +16,6 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     public function an_order_can_be_placed()
     {
-        $this->markTestIncomplete('First, make Order an event-sourced aggregate');
-
         $orderId = OrderId::fromString((string)Uuid::uuid4());
         $conferenceId = ConferenceId::fromString((string)Uuid::uuid4());
         $numberOfTickets = 2;
