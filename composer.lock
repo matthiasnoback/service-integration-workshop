@@ -411,16 +411,16 @@
         },
         {
             "name": "matthiasnoback/php-workshop-tools",
-            "version": "v0.7.0",
+            "version": "v0.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasnoback/php-workshop-tools.git",
-                "reference": "0cece25c9ce0f7709c0a5a47eb287b6d59b5fbd0"
+                "reference": "19d82c4df458c9cb579b92c61082e598503f4da7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasnoback/php-workshop-tools/zipball/0cece25c9ce0f7709c0a5a47eb287b6d59b5fbd0",
-                "reference": "0cece25c9ce0f7709c0a5a47eb287b6d59b5fbd0",
+                "url": "https://api.github.com/repos/matthiasnoback/php-workshop-tools/zipball/19d82c4df458c9cb579b92c61082e598503f4da7",
+                "reference": "19d82c4df458c9cb579b92c61082e598503f4da7",
                 "shasum": ""
             },
             "require": {
@@ -453,7 +453,7 @@
                     "email": "matthiasnoback@gmail.com"
                 }
             ],
-            "time": "2017-04-19T07:09:07+00:00"
+            "time": "2017-04-19T08:10:48+00:00"
         },
         {
             "name": "paragonie/random_compat",
