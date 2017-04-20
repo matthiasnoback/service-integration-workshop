@@ -12,4 +12,4 @@ fi
 
 command="composer ${arguments}"
 echo "Run in devtools container: ${command}"
-docker-compose run devtools ${command}
+docker-compose run --rm devtools ${command}

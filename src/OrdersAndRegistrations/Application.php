@@ -13,11 +13,9 @@ use NaiveSerializer\Serializer;
 
 final class Application
 {
-    public function placeOrderController(): void
+    public function placeOrder(string $data): void
     {
-        $requestBody = file_get_contents('php://input');
-
-        $command = Serializer::deserialize(PlaceOrder::class, $requestBody);
+        $command = Serializer::deserialize(PlaceOrder::class, $data);
 
         $order = Order::place(
             OrderId::fromString($command->orderId),
@@ -34,9 +32,6 @@ final class Application
             ->setBody('Test');
 
         $this->mailer()->send($email);
-
-        header('Content-Type: text/plain', true, 200);
-        exit;
     }
 
     public function whenOrderPlaced(OrderPlaced $event)

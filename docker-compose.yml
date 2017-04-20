@@ -42,6 +42,7 @@ services:
         depends_on:
             - rabbitmq
             - mailcatcher
+        tty: true
         env_file: .env
         environment:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"

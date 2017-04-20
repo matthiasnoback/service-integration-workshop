@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-docker-compose run devtools vendor/bin/phpunit
+docker-compose run --rm devtools vendor/bin/phpunit
