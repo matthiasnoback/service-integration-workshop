@@ -19,15 +19,17 @@ final class Queue
     {
         $channel = self::channel();
 
-        $channel->queueDeclare(
-            static::queueName(),
+        $result = $channel->queueDeclare(
+            '',
             false, // not passive; check if queue declarations are compatible
             false, // not durable; queue won't be recreated upon server restart
             false, // not exclusive; can be shared between connections
             true // auto-delete: when all consumers have finished using it, the queue gets deleted
         );
+        $queueName = $result->queue;
+
         // set up a default queue, receiving all messages from the exchange
-        $channel->queueBind(self::queueName(), self::exchangeName(), '#');
+        $channel->queueBind($queueName, self::exchangeName(), '#');
 
         $callback = function (Message $message, Channel $channel) use ($userCallback) {
             stdout(
@@ -58,17 +60,12 @@ final class Queue
         // consume a message by invoking $callback
         $channel->run(
             $callback,
-            self::queueName(),
+            $queueName,
             '', // consumer tag
             false, // local: also accept messages from same connection
             false, // ack: wait for ack
             false, // not exclusive: can be shared between connections
             false // wait: wait for a reply from the server
         );
-    }
-
-    private static function queueName()
-    {
-        return 'messages';
     }
 }
