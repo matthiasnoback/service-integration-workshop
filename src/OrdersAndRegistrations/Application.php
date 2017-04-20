@@ -9,14 +9,11 @@ use Common\EventSourcing\EventStore\EventStore;
 use Common\EventSourcing\EventStore\Storage\DatabaseStorageFacility;
 use Common\Persistence\Database;
 use NaiveSerializer\JsonSerializer;
-use NaiveSerializer\Serializer;
 
 final class Application
 {
-    public function placeOrder(string $data): void
+    public function placeOrder(PlaceOrder $command): void
     {
-        $command = Serializer::deserialize(PlaceOrder::class, $data);
-
         $order = Order::place(
             OrderId::fromString($command->orderId),
             ConferenceId::fromString($command->conferenceId),

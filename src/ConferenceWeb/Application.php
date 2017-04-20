@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace ConferenceWeb;
 
-use GuzzleHttp\Client;
-use NaiveSerializer\Serializer;
 use Ramsey\Uuid\Uuid;
 use Shared\RabbitMQ\Exchange;
 use Shared\StringUtil;
@@ -17,6 +15,7 @@ final class Application
 
             $command = $_POST;
             $command['orderId'] = (string)Uuid::uuid4();
+            $command['numberOfTickets'] = (int)$command['numberOfTickets'];
 
             Exchange::publish('orders_and_registrations.place_order', $command);
 

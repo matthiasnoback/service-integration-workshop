@@ -1,0 +1,15 @@
+{
+  "title": "PlaceOrder command",
+  "type": "object",
+  "properties": {
+    "orderId": {
+      "type": "string"
+    },
+    "conferenceId": {
+      "type": "string"
+    },
+    "numberOfTickets": {
+      "type": "number"
+    }
+  }
+}

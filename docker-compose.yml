@@ -49,6 +49,7 @@ services:
             PHP_IDE_CONFIG: "serverName=orders_and_registrations"
             DB_PATH: /opt/var/db/orders_and_registrations
         restart: "on-failure:5"
+        stop_signal: SIGKILL
 
     orders_and_registrations_web:
         image: matthiasnoback/php_workshop_tools_simple_webserver
@@ -135,11 +136,11 @@ services:
             - ${PWD}:/opt
         env_file: .env
         restart: "no"
-
-    timer:
-        image: matthiasnoback/php_workshop_tools_base
-        command: php src/OrdersAndRegistrations/timer.php
-        volumes:
-            - ${PWD}:/opt
-        env_file: .env
-        restart: "on-failure:5"
+#
+#    timer:
+#        image: matthiasnoback/php_workshop_tools_base
+#        command: php src/OrdersAndRegistrations/timer.php
+#        volumes:
+#            - ${PWD}:/opt
+#        env_file: .env
+#        restart: "on-failure:5"
