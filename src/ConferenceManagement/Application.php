@@ -6,6 +6,7 @@ namespace ConferenceManagement;
 use Common\Persistence\Database;
 use NaiveSerializer\Serializer;
 use Ramsey\Uuid\Uuid;
+use Shared\RabbitMQ\Exchange;
 
 final class Application
 {
@@ -20,6 +21,8 @@ final class Application
                 $_POST['city']
             );
             Database::persist($conference);
+
+            Exchange::publish('conference_management.conference_created', $conference);
 
             header('Location: /listConferences');
             exit;
