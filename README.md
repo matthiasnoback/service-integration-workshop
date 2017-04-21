@@ -34,3 +34,4 @@
 - Use [`docker-compose restart [container name]`](https://docs.docker.com/compose/reference/restart/) to restart a container (e.g. the `orders_and_registrations` container). This is particularly relevant when you want to test changes you made to the code of a RabbitMQ consumer.
 - Run `./bin/composer.sh require ...` to install additional packages.
 - Run `./bin/recreate.sh [container_name]` to recreate a container (if you provide no arguments, all containers will be recreated).
+- Run `./bin/restart.sh [container_name]` to simply restart a container (if you provide no arguments, all containers will be restarted).
