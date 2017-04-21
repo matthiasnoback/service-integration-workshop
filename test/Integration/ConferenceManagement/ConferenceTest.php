@@ -19,8 +19,9 @@ class ConferenceTest extends \PHPUnit_Framework_TestCase
         $end = new \DateTimeImmutable('+1 day');
         $name = 'The name';
         $city = 'Zeist';
+        $availableTickets = 10;
 
-        $conference = new Conference($id, $name, $start, $end, $city);
+        $conference = new Conference($id, $name, $start, $end, $city, $availableTickets);
 
         $serializedData = Serializer::serialize($conference);
         $deserializedConference = Serializer::deserialize(Conference::class, $serializedData);

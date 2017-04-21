@@ -8,6 +8,9 @@ use Common\EventSourcing\Aggregate\Repository\EventSourcedAggregateRepository;
 use Common\EventSourcing\EventStore\EventStore;
 use Common\EventSourcing\EventStore\Storage\DatabaseStorageFacility;
 use NaiveSerializer\JsonSerializer;
+use OrdersAndRegistrations\Domain\Model\SeatsAvailability\ReservationId;
+use OrdersAndRegistrations\Domain\Model\SeatsAvailability\SeatsAvailability;
+use Ramsey\Uuid\Uuid;
 
 final class Application
 {
@@ -24,6 +27,15 @@ final class Application
 
     public function whenOrderPlaced(OrderPlaced $event)
     {
+        // Make a seat reservation:
+        /** @var SeatsAvailability $seatsAvailability */
+        $seatsAvailability = $this->seatsAvailabilityRepository()->getById((string)$event->conferenceId());
+
+        $seatsAvailability->makeReservation(ReservationId::fromString((string)Uuid::uuid4()), $event->numberOfTickets());
+
+        $this->seatsAvailabilityRepository()->save($seatsAvailability);
+
+        // Send a confirmation email:
         $email = \Swift_Message::newInstance()
             ->setTo(['noreply@mywebsite.com'])
             ->setFrom(['noreply@mywebsite.com'])
@@ -75,5 +87,30 @@ final class Application
         }
 
         return $mailer;
+    }
+
+    public function whenConferenceCreated($data)
+    {
+        $seatsAvailability = SeatsAvailability::create(ConferenceId::fromString($data->id), $data->availableTickets);
+
+        $this->seatsAvailabilityRepository()->save($seatsAvailability);
+    }
+
+    private function seatsAvailabilityRepository(): EventSourcedAggregateRepository
+    {
+        static $seatsAvailabilityRepository;
+
+        if ($seatsAvailabilityRepository === null) {
+            $seatsAvailabilityRepository = $seatsAvailabilityRepository ?? new EventSourcedAggregateRepository(
+                    new EventStore(
+                        new DatabaseStorageFacility(),
+                        $this->eventDispatcher(),
+                        new JsonSerializer()
+                    ),
+                    SeatsAvailability::class
+                );
+        }
+
+        return $seatsAvailabilityRepository;
     }
 }

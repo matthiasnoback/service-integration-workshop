@@ -18,14 +18,16 @@ class ConferenceTest extends \PHPUnit_Framework_TestCase
         $end = new \DateTimeImmutable('+1 day');
         $name = 'The name';
         $city = 'Zeist';
+        $availableTickets = 10;
 
-        $conference = new Conference($id, $name, $start, $end, $city);
+        $conference = new Conference($id, $name, $start, $end, $city, $availableTickets);
 
         $this->assertEquals($id, $conference->getId());
         $this->assertEquals($name, $conference->getName());
         $this->assertDateEquals($start, $conference->getStart());
         $this->assertDateEquals($end, $conference->getEnd());
         $this->assertEquals($city, $conference->getCity());
+        $this->assertEquals($availableTickets, $conference->getAvailableTickets());
     }
 
     private function assertDateEquals(\DateTimeImmutable $left, \DateTimeImmutable $right)

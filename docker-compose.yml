@@ -33,7 +33,6 @@ services:
             PHP_IDE_CONFIG: "serverName=conference_web_consumer"
             DB_PATH: /opt/var/db/conference_web_consumer
         restart: "on-failure:5"
-        stop_signal: SIGKILL
 
     conference_management:
         image: matthiasnoback/php_workshop_tools_simple_webserver

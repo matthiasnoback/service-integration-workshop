@@ -36,13 +36,19 @@ final class Conference
      */
     private $city;
 
-    public function __construct(string $id, string $name, \DateTimeImmutable $start, \DateTimeImmutable $end, $city)
+    /**
+     * @var int
+     */
+    private $availableTickets;
+
+    public function __construct(string $id, string $name, \DateTimeImmutable $start, \DateTimeImmutable $end, $city, int $availableTickets)
     {
         $this->setId($id);
         $this->setName($name);
         $this->setStart($start);
         $this->setEnd($end);
         $this->setCity($city);
+        $this->setAvailableTickets($availableTickets);
     }
 
     /**
@@ -128,5 +134,15 @@ final class Conference
     public function setCity(string $city): void
     {
         $this->city = $city;
+    }
+
+    private function setAvailableTickets(int $availableTickets): void
+    {
+        $this->availableTickets = $availableTickets;
+    }
+
+    public function getAvailableTickets(): int
+    {
+        return $this->availableTickets;
     }
 }
