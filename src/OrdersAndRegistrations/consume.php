@@ -6,7 +6,7 @@ use function Common\CommandLine\make_red;
 use function Common\CommandLine\stdout;
 use JsonSchema\Validator;
 use OrdersAndRegistrations\Application;
-use OrdersAndRegistrations\PlaceOrder;
+use OrdersAndRegistrations\Application\PlaceOrder;
 use Shared\RabbitMQ\Queue;
 use function Common\Resilience\retry;
 

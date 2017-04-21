@@ -8,9 +8,20 @@ use Common\EventSourcing\Aggregate\Repository\EventSourcedAggregateRepository;
 use Common\EventSourcing\EventStore\EventStore;
 use Common\EventSourcing\EventStore\Storage\DatabaseStorageFacility;
 use NaiveSerializer\JsonSerializer;
+use OrdersAndRegistrations\Application\ExpireOrder;
+use OrdersAndRegistrations\Application\MakeSeatReservation;
+use OrdersAndRegistrations\Application\MarkAsBooked;
+use OrdersAndRegistrations\Application\OrderProcessManager;
+use OrdersAndRegistrations\Application\PlaceOrder;
+use OrdersAndRegistrations\Application\RejectOrder;
+use OrdersAndRegistrations\Domain\Model\Order\ConferenceId;
+use OrdersAndRegistrations\Domain\Model\Order\Order;
+use OrdersAndRegistrations\Domain\Model\Order\OrderId;
+use OrdersAndRegistrations\Domain\Model\Order\OrderPlaced;
+use OrdersAndRegistrations\Domain\Model\SeatsAvailability\ReservationAccepted;
 use OrdersAndRegistrations\Domain\Model\SeatsAvailability\ReservationId;
+use OrdersAndRegistrations\Domain\Model\SeatsAvailability\ReservationRejected;
 use OrdersAndRegistrations\Domain\Model\SeatsAvailability\SeatsAvailability;
-use Ramsey\Uuid\Uuid;
 
 final class Application
 {
@@ -25,16 +36,48 @@ final class Application
         $this->orderRepository()->save($order);
     }
 
-    public function whenOrderPlaced(OrderPlaced $event)
+    public function rejectOrder(RejectOrder $command): void
     {
-        // Make a seat reservation:
-        /** @var SeatsAvailability $seatsAvailability */
-        $seatsAvailability = $this->seatsAvailabilityRepository()->getById((string)$event->conferenceId());
+        /** @var Order $order */
+        $order = $this->orderRepository()->getById($command->orderId);
 
-        $seatsAvailability->makeReservation(ReservationId::fromString((string)Uuid::uuid4()), $event->numberOfTickets());
+        $order->reject();
+
+        $this->orderRepository()->save($order);
+    }
+
+    public function expireOrder(ExpireOrder $command): void
+    {
+        /** @var Order $order */
+        $order = $this->orderRepository()->getById($command->orderId);
+
+        $order->expire();
+
+        $this->orderRepository()->save($order);
+    }
+
+    public function markAsBooked(MarkAsBooked $command)
+    {
+        /** @var Order $order */
+        $order = $this->orderRepository()->getById($command->orderId);
+
+        $order->markAsBooked();
+
+        $this->orderRepository()->save($order);
+    }
+
+    public function makeReservation(MakeSeatReservation $command): void
+    {
+        /** @var SeatsAvailability $seatsAvailability */
+        $seatsAvailability = $this->seatsAvailabilityRepository()->getById($command->conferenceId);
+
+        $seatsAvailability->makeReservation(ReservationId::fromString($command->reservationId), $command->quantity);
 
         $this->seatsAvailabilityRepository()->save($seatsAvailability);
+    }
 
+    public function whenOrderPlaced(OrderPlaced $event)
+    {
         // Send a confirmation email:
         $email = \Swift_Message::newInstance()
             ->setTo(['noreply@mywebsite.com'])
@@ -72,6 +115,18 @@ final class Application
 
             $eventDispatcher->registerSubscriber(OrderPlaced::class, [$this, 'whenOrderPlaced']);
 
+            $eventDispatcher->registerSubscriber(
+                OrderPlaced::class,
+                [$this->orderProcessManager(), 'whenOrderPlaced']
+            );
+            $eventDispatcher->registerSubscriber(
+                ReservationAccepted::class,
+                [$this->orderProcessManager(), 'whenReservationAccepted']
+            );
+            $eventDispatcher->registerSubscriber(
+                ReservationRejected::class,
+                [$this->orderProcessManager(), 'whenReservationRejected']
+            );
         }
 
         return $eventDispatcher;
@@ -112,5 +167,16 @@ final class Application
         }
 
         return $seatsAvailabilityRepository;
+    }
+
+    private function orderProcessManager(): OrderProcessManager
+    {
+        static $orderProcessManager;
+
+        if ($orderProcessManager === null) {
+            $orderProcessManager = new OrderProcessManager($this);
+        }
+
+        return $orderProcessManager;
     }
 }

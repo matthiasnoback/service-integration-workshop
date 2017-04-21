@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Test\Unit\OrdersAndRegistrations;
 
-use OrdersAndRegistrations\ConferenceId;
-use OrdersAndRegistrations\Order;
-use OrdersAndRegistrations\OrderId;
-use OrdersAndRegistrations\OrderPlaced;
+use OrdersAndRegistrations\Domain\Model\Order\ConferenceId;
+use OrdersAndRegistrations\Domain\Model\Order\Order;
+use OrdersAndRegistrations\Domain\Model\Order\OrderId;
+use OrdersAndRegistrations\Domain\Model\Order\OrderPlaced;
 use Ramsey\Uuid\Uuid;
 
 class OrderTest extends \PHPUnit_Framework_TestCase
@@ -20,7 +20,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $conferenceId = ConferenceId::fromString((string)Uuid::uuid4());
         $numberOfTickets = 2;
 
-        $order = Order::place($orderId, $conferenceId, $numberOfTickets);
+        $order = \OrdersAndRegistrations\Domain\Model\Order\Order::place($orderId, $conferenceId, $numberOfTickets);
 
         $this->assertEquals(
             [

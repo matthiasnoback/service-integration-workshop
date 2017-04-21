@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Test\Integration\OrdersAndRegistrations;
 
 use NaiveSerializer\Serializer;
-use OrdersAndRegistrations\ConferenceId;
-use OrdersAndRegistrations\OrderId;
-use OrdersAndRegistrations\OrderPlaced;
+use OrdersAndRegistrations\Domain\Model\Order\ConferenceId;
+use OrdersAndRegistrations\Domain\Model\Order\OrderId;
+use OrdersAndRegistrations\Domain\Model\Order\OrderPlaced;
 use Ramsey\Uuid\Uuid;
 
 class OrderPlacedTest extends \PHPUnit_Framework_TestCase
@@ -17,10 +17,10 @@ class OrderPlacedTest extends \PHPUnit_Framework_TestCase
     public function it_can_be_serialized()
     {
         $orderId = OrderId::fromString((string)Uuid::uuid4());
-        $conferenceId = ConferenceId::fromString((string)Uuid::uuid4());
+        $conferenceId = \OrdersAndRegistrations\Domain\Model\Order\ConferenceId::fromString((string)Uuid::uuid4());
         $numberOfTickets = 2;
 
-        $orderPlaced = new OrderPlaced(
+        $orderPlaced = new \OrdersAndRegistrations\Domain\Model\Order\OrderPlaced(
             $orderId,
             $conferenceId,
             $numberOfTickets

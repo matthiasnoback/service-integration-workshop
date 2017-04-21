@@ -5,7 +5,7 @@ namespace OrdersAndRegistrations\Domain\Model\SeatsAvailability;
 
 use Common\EventSourcing\Aggregate\EventSourcedAggregate;
 use Common\EventSourcing\Aggregate\EventSourcedAggregateCapabilities;
-use OrdersAndRegistrations\ConferenceId;
+use OrdersAndRegistrations\Domain\Model\Order\ConferenceId;
 
 final class SeatsAvailability implements EventSourcedAggregate
 {

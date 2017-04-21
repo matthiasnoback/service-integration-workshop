@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace OrdersAndRegistrations\Domain\Model\SeatsAvailability;
 
-use OrdersAndRegistrations\ConferenceId;
+use OrdersAndRegistrations\Domain\Model\Order\ConferenceId;
 
 final class ReservationAccepted
 {
     /**
-     * @var ConferenceId
+     * @var \OrdersAndRegistrations\Domain\Model\Order\ConferenceId
      */
     private $conferenceId;
 

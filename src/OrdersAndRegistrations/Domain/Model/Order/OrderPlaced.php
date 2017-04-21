@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace OrdersAndRegistrations;
+namespace OrdersAndRegistrations\Domain\Model\Order;
 
 final class OrderPlaced
 {

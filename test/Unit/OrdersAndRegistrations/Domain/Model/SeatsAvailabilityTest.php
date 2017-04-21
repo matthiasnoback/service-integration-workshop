@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\OrdersAndRegistrations\Domain\Model;
 
-use OrdersAndRegistrations\ConferenceId;
+use OrdersAndRegistrations\Domain\Model\Order\ConferenceId;
 use OrdersAndRegistrations\Domain\Model\SeatsAvailability\ReservationCancelled;
 use OrdersAndRegistrations\Domain\Model\SeatsAvailability\ReservationCommitted;
 use OrdersAndRegistrations\Domain\Model\SeatsAvailability\ReservationId;
