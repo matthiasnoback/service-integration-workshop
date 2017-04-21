@@ -14,6 +14,7 @@ retry(3, 1000, function () use ($app) {
     Queue::consume(
         function (Message $message) use ($app) {
             // do nothing (yet)
-        }
+        },
+        'orders_and_registrations'
     );
 });
