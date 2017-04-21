@@ -38,6 +38,8 @@ retry(3, 1000, function () use ($app) {
                 $app->placeOrder($command);
             } elseif ($message->getHeader('message_type') === 'conference_management.conference_created') {
                 $app->whenConferenceCreated(json_decode($message->content));
+            } elseif ($message->getHeader('message_type') === 'payment.payment_received') {
+                $app->consumePaymentReceived(json_decode($message->content));
             }
         },
         'orders_and_registrations'

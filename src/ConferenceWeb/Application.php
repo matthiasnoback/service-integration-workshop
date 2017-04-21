@@ -20,7 +20,12 @@ final class Application
 
             Exchange::publish('orders_and_registrations.place_order', $command);
 
-            header('Location: /thankYou?orderId=' . $command['orderId']);
+            $query = http_build_query([
+                'order_id' => $command['orderId'],
+                'amount' => 1000,
+                'callback_url' => 'http://conference_web:8080/payment/'
+            ]);
+            header('Location: http://localhost:8082/?' . $query);
             exit;
         }
 
@@ -43,6 +48,18 @@ final class Application
             <button type="submit">Place order</button>
         </form>
         <?php
+    }
+
+    public function paymentController()
+    {
+        $postData = file_get_contents('php://input');
+        $result = json_decode($postData);
+
+        if ($result->success) {
+            Exchange::publish('payment.payment_received', [
+                'orderId' => $result->orderId
+            ]);
+        }
     }
 
     public function thankYouController()

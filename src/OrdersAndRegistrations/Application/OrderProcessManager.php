@@ -26,7 +26,7 @@ final class OrderProcessManager
         /*
          * Transition to state: "awaiting reservation confirmation"
          */
-        $orderState = OrderState::awaitReservationConfirmation($event->orderId());
+        $orderState = OrderState::awaitReservationConfirmation($event->conferenceId(), $event->orderId());
         Database::persist($orderState);
 
         /*
@@ -89,5 +89,30 @@ final class OrderProcessManager
         $command = new RejectOrder();
         $command->orderId = (string)$event->reservationId();
         $this->application->rejectOrder($command);
+    }
+
+    public function whenPaymentReceived(PaymentReceived $event): void
+    {
+        /** @var OrderState $orderState*/
+        $orderState = Database::retrieve(OrderState::class, (string)$event->orderId());
+
+        if (!$orderState->isAwaitingPayment()) {
+            throw new InvalidOperation();
+        }
+
+        /*
+         * Transition to state: "completed"
+         */
+        $orderState->complete();
+        Database::persist($orderState);
+
+        /*
+         * Send command: "commit seat reservation"
+         */
+        $command = new CommitSeatReservation();
+        $command->reservationId = (string)$event->orderId();
+        $command->conferenceId = (string)$orderState->conferenceId();
+
+        $this->application->commitSeatReservation($command);
     }
 }

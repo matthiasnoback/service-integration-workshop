@@ -8,10 +8,12 @@ use Common\EventSourcing\Aggregate\Repository\EventSourcedAggregateRepository;
 use Common\EventSourcing\EventStore\EventStore;
 use Common\EventSourcing\EventStore\Storage\DatabaseStorageFacility;
 use NaiveSerializer\JsonSerializer;
+use OrdersAndRegistrations\Application\CommitSeatReservation;
 use OrdersAndRegistrations\Application\ExpireOrder;
 use OrdersAndRegistrations\Application\MakeSeatReservation;
 use OrdersAndRegistrations\Application\MarkAsBooked;
 use OrdersAndRegistrations\Application\OrderProcessManager;
+use OrdersAndRegistrations\Application\PaymentReceived;
 use OrdersAndRegistrations\Application\PlaceOrder;
 use OrdersAndRegistrations\Application\RejectOrder;
 use OrdersAndRegistrations\Domain\Model\Order\ConferenceId;
@@ -127,6 +129,10 @@ final class Application
                 ReservationRejected::class,
                 [$this->orderProcessManager(), 'whenReservationRejected']
             );
+            $eventDispatcher->registerSubscriber(
+                PaymentReceived::class,
+                [$this->orderProcessManager(), 'whenPaymentReceived']
+            );
         }
 
         return $eventDispatcher;
@@ -178,5 +184,20 @@ final class Application
         }
 
         return $orderProcessManager;
+    }
+
+    public function consumePaymentReceived($data): void
+    {
+        $this->eventDispatcher()->dispatch(new PaymentReceived(OrderId::fromString($data->orderId)));
+    }
+
+    public function commitSeatReservation(CommitSeatReservation $command)
+    {
+        /** @var SeatsAvailability $seatsAvailability */
+        $seatsAvailability = $this->seatsAvailabilityRepository()->getById($command->conferenceId);
+
+        $seatsAvailability->commitReservation(ReservationId::fromString($command->reservationId));
+
+        $this->seatsAvailabilityRepository()->save($seatsAvailability);
     }
 }

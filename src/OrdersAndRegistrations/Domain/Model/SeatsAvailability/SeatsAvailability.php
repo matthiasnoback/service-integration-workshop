@@ -83,7 +83,7 @@ final class SeatsAvailability implements EventSourcedAggregate
         unset($this->reservations[(string)$event->reservationId()]);
     }
 
-    public function commitReservation($reservationId): void
+    public function commitReservation(ReservationId $reservationId): void
     {
         if (!isset($this->reservations[(string)$reservationId])) {
             throw new \OutOfBoundsException('Unknown reservation: ' . (string)$reservationId);

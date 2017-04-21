@@ -1,5 +1,6 @@
 <?php
 
+use GuzzleHttp\Client;
 use Stripe\Stripe;
 
 if (!isset($_GET['amount'])) {
@@ -8,6 +9,10 @@ if (!isset($_GET['amount'])) {
 
 if (!isset($_GET['order_id'])) {
     throw new \RuntimeException('Provide a query parameter "order_id"');
+}
+
+if (!isset($_GET['callback_url'])) {
+    throw new \RuntimeException('Provide a query parameter "callback_url"');
 }
 
 require __DIR__ . '/../../vendor/autoload.php';
@@ -21,6 +26,8 @@ if (isset($_POST['stripeToken'])) {
     // Get the payment token submitted by the form:
     $token = $_POST['stripeToken'];
 
+    $httpClient = new Client();
+
     // Charge the user's card:
     try {
         $charge = \Stripe\Charge::create(array(
@@ -31,10 +38,25 @@ if (isset($_POST['stripeToken'])) {
             'metadata' => ['order_id' => (string)$_GET['order_id']],
         ));
 
+        $httpClient->post($_GET['callback_url'], [
+            'body' => json_encode([
+                'success' => true,
+                'orderId' => $_GET['order_id']
+            ])
+        ]);
+
         header('Content-Type: text/plain', true, 200);
         echo 'Payment successful';
         exit;
     } catch (\Exception $exception) {
+        $httpClient->post($_GET['callback_url'], [
+            'body' => json_encode([
+                'success' => false,
+                'orderId' => $_GET['order_id'],
+                'error' => $exception->getMessage()
+            ])
+        ]);
+
         header('Content-Type: text/plain', true, 500);
         echo "Payment unsuccesful\n\n";
         echo $exception;
@@ -78,7 +100,7 @@ if (isset($_POST['stripeToken'])) {
             <h1>External Payment Provider</h1>
             <form action="#" method="post" id="payment-form" class="form">
                 <div class="alert alert-info">You're about to pay <strong>&euro;<?php
-                        echo number_format($_GET['amount']/100, 2, ',', '.');
+                        echo number_format($_GET['amount'] / 100, 2, ',', '.');
                         ?></strong></div>
                 <div class="form-form-group">
                     <label for="card-element">

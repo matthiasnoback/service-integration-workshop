@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace OrdersAndRegistrations\Application;
 
+use OrdersAndRegistrations\Domain\Model\Order\ConferenceId;
 use OrdersAndRegistrations\Domain\Model\Order\OrderId;
 
 final class OrderState
@@ -11,10 +12,16 @@ final class OrderState
     const AWAITING_RESERVATION_CONFIRMATION = 'AWAITING_RESERVATION_CONFIRMATION';
     const AWAITING_PAYMENT = 'AWAITING_PAYMENT';
     const COMPLETED = 'COMPLETED';
+
     /**
      * @var OrderId
      */
     private $orderId;
+
+    /**
+     * @var ConferenceId
+     */
+    private $conferenceId;
 
     /**
      * @var string
@@ -26,10 +33,11 @@ final class OrderState
         return (string)$this->orderId;
     }
 
-    public static function awaitReservationConfirmation(OrderId $orderId)
+    public static function awaitReservationConfirmation(ConferenceId $conferenceId, OrderId $orderId)
     {
         $orderState = new OrderState();
 
+        $orderState->conferenceId = $conferenceId;
         $orderState->orderId = $orderId;
         $orderState->state = self::AWAITING_RESERVATION_CONFIRMATION;
 
@@ -59,5 +67,10 @@ final class OrderState
     public function isAwaitingReservationConfirmation()
     {
         return $this->state = self::AWAITING_RESERVATION_CONFIRMATION;
+    }
+
+    public function conferenceId()
+    {
+        return $this->conferenceId;
     }
 }
