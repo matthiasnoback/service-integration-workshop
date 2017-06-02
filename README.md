@@ -35,3 +35,4 @@
 - Run `./bin/composer.sh require ...` to install additional packages.
 - Run `./bin/recreate.sh [container_name]` to recreate a container (if you provide no arguments, all containers will be recreated).
 - Run `./bin/restart.sh [container_name]` to simply restart a container (if you provide no arguments, all containers will be restarted).
+- Run `./bin/delete-data.sh` to delete all existing data (in `/var/db` and `/var/redis`).
