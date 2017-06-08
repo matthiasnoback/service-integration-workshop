@@ -16,7 +16,7 @@ final class PlaceOrder
     public $conferenceId;
 
     /**
-     * @var integer
+     * @var int
      */
     public $numberOfTickets;
 }

@@ -13,12 +13,13 @@ use NaiveSerializer\Serializer;
 
 final class Application
 {
-    public function placeOrderController(): void
+    public function whenOrderPlaced(OrderPlaced $event)
     {
-        $requestBody = file_get_contents('php://input');
+        // respond to OrderPlaced event
+    }
 
-        $command = Serializer::deserialize(PlaceOrder::class, $requestBody);
-
+    public function placeOrder(PlaceOrder $command)
+    {
         $order = Order::place(
             OrderId::fromString($command->orderId),
             ConferenceId::fromString($command->conferenceId),
@@ -34,14 +35,6 @@ final class Application
             ->setBody('Test');
 
         $this->mailer()->send($email);
-
-        header('Content-Type: text/plain', true, 200);
-        exit;
-    }
-
-    public function whenOrderPlaced(OrderPlaced $event)
-    {
-        // respond to OrderPlaced event
     }
 
     private function orderRepository(): EventSourcedAggregateRepository

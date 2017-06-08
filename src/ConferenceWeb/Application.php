@@ -3,9 +3,8 @@ declare(strict_types=1);
 
 namespace ConferenceWeb;
 
-use GuzzleHttp\Client;
-use NaiveSerializer\Serializer;
 use Ramsey\Uuid\Uuid;
+use Shared\RabbitMQ\Exchange;
 use Shared\StringUtil;
 
 final class Application
@@ -16,15 +15,9 @@ final class Application
 
             $command = $_POST;
             $command['orderId'] = (string)Uuid::uuid4();
+            $command['numberOfTickets'] = (int)$_POST['numberOfTickets'];
 
-            $httpClient = new Client();
-            $httpClient->post('http://orders_and_registrations_web:8080/placeOrder', [
-                    'body' => Serializer::serialize($command),
-                    'headers' => [
-                        'Content-Type' => 'application/json'
-                    ]
-                ]
-            );
+            Exchange::publish('orders_and_registrations.place_order', $command);
 
             header('Location: /thankYou?orderId=' . $command['orderId']);
             exit;
