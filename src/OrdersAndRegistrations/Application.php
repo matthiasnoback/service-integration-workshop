@@ -41,7 +41,7 @@ final class Application
 
     public function whenOrderPlaced(OrderPlaced $event)
     {
-        // respond to OrderPlaced event
+        // respond to OrderPlaced event (only when you're at assignment 03!)
     }
 
     private function orderRepository(): EventSourcedAggregateRepository
