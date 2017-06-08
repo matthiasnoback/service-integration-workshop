@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace ConferenceWeb;
 
+use NaiveSerializer\Serializer;
+use Predis\Client;
 use Ramsey\Uuid\Uuid;
 use Shared\RabbitMQ\Exchange;
 use Shared\StringUtil;
@@ -26,7 +28,9 @@ final class Application
             exit;
         }
 
-        $conferences = json_decode(file_get_contents('http://conference_management:8080/listConferences'), true);
+        $conferences = array_map(function ($data) {
+            return Serializer::deserialize(Conference::class, $data);
+        }, $this->redis()->hgetall('conferences'));
 
         ?>
         <form action="#" method="post">
@@ -34,7 +38,7 @@ final class Application
                 <label for="conferenceId">Select a conference:</label>
                 <select id="conferenceId" name="conferenceId">
                     <?php foreach ($conferences as $conference): ?>
-                        <option value="<?php echo $conference['id']; ?>"><?php echo StringUtil::escapeHtml($conference['name']); ?></option>
+                        <option value="<?php echo $conference->id; ?>"><?php echo StringUtil::escapeHtml($conference->name); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -61,10 +65,21 @@ final class Application
             });
 
             var channel = pusher.subscribe('my-channel');
-            channel.bind('my-event', function(data) {
+            channel.bind('my-event', function (data) {
                 alert(data.message);
             });
         </script>
         <?php
+    }
+
+    public function redis(): Client
+    {
+        static $client;
+        if ($client === null) {
+            $client = new Client([
+                'host' => 'redis'
+            ]);
+        }
+        return $client;
     }
 }

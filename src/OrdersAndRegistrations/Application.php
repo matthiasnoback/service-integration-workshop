@@ -7,7 +7,6 @@ use Common\EventDispatcher\EventDispatcher;
 use Common\EventSourcing\Aggregate\Repository\EventSourcedAggregateRepository;
 use Common\EventSourcing\EventStore\EventStore;
 use Common\EventSourcing\EventStore\Storage\DatabaseStorageFacility;
-use Common\Persistence\Database;
 use NaiveSerializer\JsonSerializer;
 
 final class Application
@@ -26,8 +25,11 @@ final class Application
             (int)$command->numberOfTickets
         );
 
-        Database::persist($order);
+        $this->orderRepository()->save($order);
+    }
 
+    public function whenOrderPlaced(OrderPlaced $event): void
+    {
         $email = \Swift_Message::newInstance()
             ->setTo(['noreply@mywebsite.com'])
             ->setFrom(['noreply@mywebsite.com'])
@@ -35,11 +37,6 @@ final class Application
             ->setBody('Test');
 
         $this->mailer()->send($email);
-    }
-
-    public function whenOrderPlaced(OrderPlaced $event): void
-    {
-        // respond to OrderPlaced event (in assignment 03)
     }
 
     private function orderRepository(): EventSourcedAggregateRepository
@@ -68,7 +65,6 @@ final class Application
             $eventDispatcher = new EventDispatcher();
 
             $eventDispatcher->registerSubscriber(OrderPlaced::class, [$this, 'whenOrderPlaced']);
-
         }
 
         return $eventDispatcher;
