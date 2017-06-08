@@ -26,7 +26,7 @@ final class Application
         }
 
         ?>
-        <h1>Craete a new conference</h1>
+        <h1>Create a new conference</h1>
         <form action="/createConference" method="post">
             <label for="name">Name:</label>
             <input type="text" name="name" id="name"/><br>

@@ -17,6 +17,9 @@ final class Application
             $command['orderId'] = (string)Uuid::uuid4();
             $command['numberOfTickets'] = (int)$_POST['numberOfTickets'];
 
+            // to trigger a schema validation error
+            //unset($command['numberOfTickets']);
+
             Exchange::publish('orders_and_registrations.place_order', $command);
 
             header('Location: /thankYou?orderId=' . $command['orderId']);

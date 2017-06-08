@@ -9,16 +9,16 @@ use Common\EventSourcing\EventStore\EventStore;
 use Common\EventSourcing\EventStore\Storage\DatabaseStorageFacility;
 use Common\Persistence\Database;
 use NaiveSerializer\JsonSerializer;
-use NaiveSerializer\Serializer;
 
 final class Application
 {
-    public function whenOrderPlaced(OrderPlaced $event)
+    public function placeOrderSchemaController(): void
     {
-        // respond to OrderPlaced event
+        header('Content-Type: application/json');
+        echo file_get_contents(__DIR__ . '/place_order.v1.json');
     }
 
-    public function placeOrder(PlaceOrder $command)
+    public function placeOrder(PlaceOrder $command): void
     {
         $order = Order::place(
             OrderId::fromString($command->orderId),
@@ -35,6 +35,11 @@ final class Application
             ->setBody('Test');
 
         $this->mailer()->send($email);
+    }
+
+    public function whenOrderPlaced(OrderPlaced $event): void
+    {
+        // respond to OrderPlaced event (in assignment 03)
     }
 
     private function orderRepository(): EventSourcedAggregateRepository

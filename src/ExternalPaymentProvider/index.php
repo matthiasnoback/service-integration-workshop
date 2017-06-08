@@ -36,7 +36,7 @@ if (isset($_POST['stripeToken'])) {
         exit;
     } catch (\Exception $exception) {
         header('Content-Type: text/plain', true, 500);
-        echo "Payment unsuccesful\n\n";
+        echo "Payment unsuccessful\n\n";
         echo $exception;
         exit;
     }
