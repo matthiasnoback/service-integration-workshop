@@ -5,7 +5,6 @@ namespace Test\Integration\ConferenceManagement;
 
 use ConferenceManagement\Conference;
 use NaiveSerializer\Serializer;
-use Ramsey\Uuid\Uuid;
 
 class ConferenceTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,13 +13,14 @@ class ConferenceTest extends \PHPUnit_Framework_TestCase
      */
     public function it_can_be_serialized_and_deserialized()
     {
-        $id = (string)Uuid::uuid4();
+        $id = 'a0d3b607-6d3d-4452-8726-d335990bf8da';
         $start = new \DateTimeImmutable();
         $end = new \DateTimeImmutable('+1 day');
         $name = 'The name';
         $city = 'Zeist';
+        $availableTickets = 500;
 
-        $conference = new Conference($id, $name, $start, $end, $city);
+        $conference = new Conference($id, $name, $start, $end, $city, $availableTickets);
 
         $serializedData = Serializer::serialize($conference);
         $deserializedConference = Serializer::deserialize(Conference::class, $serializedData);

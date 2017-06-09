@@ -17,7 +17,8 @@ final class Application
                 $_POST['name'],
                 new \DateTimeImmutable($_POST['start']),
                 new \DateTimeImmutable($_POST['end']),
-                $_POST['city']
+                $_POST['city'],
+                (int)$_POST['availableTickets']
             );
             Database::persist($conference);
 
@@ -26,7 +27,7 @@ final class Application
         }
 
         ?>
-        <h1>Craete a new conference</h1>
+        <h1>Create a new conference</h1>
         <form action="/createConference" method="post">
             <label for="name">Name:</label>
             <input type="text" name="name" id="name"/><br>
@@ -36,6 +37,8 @@ final class Application
             <input type="text" name="end" id="end"/><br>
             <label for="city">City:</label>
             <input type="text" name="city" id="city"/><br>
+            <label for="availableTickets">Number of available tickets:</label>
+            <input type="text" name="availableTickets" id="availableTickets"/><br>
             <button type="submit">Create</button>
         </form>
         <?php
@@ -56,21 +59,24 @@ final class Application
                     'DDD Europe',
                     new \DateTimeImmutable('2017-02-02'),
                     new \DateTimeImmutable('2017-02-03'),
-                    'Amsterdam'
+                    'Amsterdam',
+                    500
                 ),
                 new Conference(
                     '99d8bbd5-1d97-4bf4-85c3-246a143c2521',
                     'DDDx',
                     new \DateTimeImmutable('2017-04-27'),
                     new \DateTimeImmutable('2017-04-28'),
-                    'London'
+                    'London',
+                    200
                 ),
                 new Conference(
                     'f7e14c73-a6dc-4f59-ac8f-7ed875052056',
                     'Explore DDD',
                     new \DateTimeImmutable('2017-09-21'),
                     new \DateTimeImmutable('2017-09-22'),
-                    'Denver'
+                    'Denver',
+                    600
                 ),
             ];
         }
