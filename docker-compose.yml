@@ -108,7 +108,7 @@ services:
     redis:
         image: redis:3.2
         volumes:
-            - ./var/redis:/data
+            - ./var/db/redis:/data
         command: redis-server --appendonly yes
 
     redis_browser:

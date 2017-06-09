@@ -5,7 +5,7 @@
     "ramsey/uuid": "^3.5",
     "stripe/stripe-php": "^4.7",
     "bunny/bunny": "^0.2.4",
-    "matthiasnoback/php-workshop-tools": "^0.9",
+    "matthiasnoback/php-workshop-tools": "^0.11",
     "guzzlehttp/guzzle": "^6.2",
     "justinrainbow/json-schema": "^5.2",
     "symfony/var-dumper": "^3.2",
