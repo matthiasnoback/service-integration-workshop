@@ -1,6 +1,9 @@
 version: '2'
 
 services:
+    #############################################################################
+    # The main website
+    #
     conference_web:
         image: matthiasnoback/php_workshop_tools_simple_webserver
         command: src/ConferenceWeb/
@@ -9,7 +12,7 @@ services:
         volumes:
             - .:/opt
         depends_on:
-            - conference_management
+            - conference_management_web
             - rabbitmq
         tty: true
         env_file: .env
@@ -19,7 +22,10 @@ services:
             DB_PATH: /opt/var/db/conference_web
         restart: "on-failure:5"
 
-    conference_management:
+    #############################################################################
+    # Services for the "ConferenceManagement" context
+    #
+    conference_management_web:
         image: matthiasnoback/php_workshop_tools_simple_webserver
         command: src/ConferenceManagement/
         ports:
@@ -34,7 +40,10 @@ services:
             DB_PATH: /opt/var/db/conference_management
         restart: "on-failure:5"
 
-    orders_and_registrations:
+    #############################################################################
+    # Services for the "OrdersAndRegistrations" context
+    #
+    orders_and_registrations_consumer:
         image: matthiasnoback/php_workshop_tools_base
         command: php src/OrdersAndRegistrations/consume.php
         volumes:
@@ -45,7 +54,7 @@ services:
         env_file: .env
         environment:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
-            PHP_IDE_CONFIG: "serverName=orders_and_registrations"
+            PHP_IDE_CONFIG: "serverName=orders_and_registrations_consumer"
             DB_PATH: /opt/var/db/orders_and_registrations
         restart: "on-failure:5"
         stop_signal: SIGKILL
@@ -67,7 +76,18 @@ services:
             DB_PATH: /opt/var/db/orders_and_registrations
         restart: "on-failure:5"
 
-    external_payment_provider:
+    orders_and_registrations_timer:
+        image: matthiasnoback/php_workshop_tools_base
+        command: php src/OrdersAndRegistrations/timer.php
+        volumes:
+            - ${PWD}:/opt
+        env_file: .env
+        restart: "on-failure:5"
+
+    #############################################################################
+    # A stub for the "ExternalPaymentProvider" website
+    #
+    external_payment_provider_web:
         image: matthiasnoback/php_workshop_tools_simple_webserver
         command: src/ExternalPaymentProvider/
         volumes:
@@ -78,10 +98,13 @@ services:
         env_file: .env
         environment:
             XDEBUG_CONFIG: "remote_host=${DOCKER_HOST_IP}"
-            PHP_IDE_CONFIG: "serverName=external_payment_provider"
+            PHP_IDE_CONFIG: "serverName=external_payment_provider_web"
             DB_PATH: /opt/var/db/external_payment_provider
         restart: "on-failure:5"
 
+    #############################################################################
+    # Shared infrastructure services
+    #
     redis:
         image: redis:3.2
         volumes:
@@ -110,6 +133,9 @@ services:
             - 1080:1080
         restart: "on-failure:5"
 
+    #############################################################################
+    # Development tools
+    #
     devtools:
         image: matthiasnoback/php_workshop_tools_base
         user: $HOST_UID:$HOST_GID
@@ -127,19 +153,3 @@ services:
             - ${PWD}:/opt
         env_file: .env
         restart: "no"
-
-    test_redis:
-        image: matthiasnoback/php_workshop_tools_base
-        command: php src/ConferenceWeb/test_redis.php
-        volumes:
-            - ${PWD}:/opt
-        env_file: .env
-        restart: "no"
-
-    timer:
-        image: matthiasnoback/php_workshop_tools_base
-        command: php src/OrdersAndRegistrations/timer.php
-        volumes:
-            - ${PWD}:/opt
-        env_file: .env
-        restart: "on-failure:5"

@@ -30,7 +30,7 @@ final class Application
             exit;
         }
 
-        $conferences = json_decode(file_get_contents('http://conference_management:8080/listConferences'), true);
+        $conferences = json_decode(file_get_contents('http://conference_management_web:8080/listConferences'), true);
 
         ?>
         <form action="#" method="post">
